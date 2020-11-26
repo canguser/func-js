@@ -1,0 +1,9 @@
+{
+  "workspaces": [
+    "packages/*"
+  ],
+  "version": "0.1",
+  "author": "Cangshi",
+  "license": "MIT",
+  "private": true
+}

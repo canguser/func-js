@@ -1,0 +1,8 @@
+{
+  "name": "@func-js/core",
+  "version": "0.1",
+  "description": "the core package of func-js",
+  "main": "index.js",
+  "author": "Cangshi",
+  "license": "MIT"
+}
