@@ -1,5 +1,14 @@
-import {getAllProperty} from "@func-js/utils";
+import {FuncInstance} from "./classes/FuncInstance";
 
-export function FuncGiven(func) {
-    return  getAllProperty(new Date());
+const defaultOptions = {
+    instanceType: FuncInstance
+};
+
+export function FuncGiven(func, options) {
+    options = {...defaultOptions, ...options};
+    const resultFunc = function (...args) {
+        return func.apply(this, args);
+    };
+    Object.setPrototypeOf(resultFunc, options.instanceType.prototype);
+    return resultFunc;
 }

@@ -19,6 +19,7 @@
     "LICENSE",
     "package.json"
   ],
+  "types": "types/index.d.ts",
   "dependencies": {
     "@func-js/utils": "^0.0.1"
   },
