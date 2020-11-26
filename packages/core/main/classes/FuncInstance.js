@@ -13,6 +13,13 @@ export class FuncInstance extends Function {
         const _this = this;
         return convertTarget(function (...args) {
             const result = _this.apply(this, args);
+            if (result instanceof Promise) {
+                return result.then(
+                    res => {
+                        return cb.apply(this, [_this, args, res])
+                    }
+                )
+            }
             return cb.apply(this, [_this, args, result])
         }, this);
     }
