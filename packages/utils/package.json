@@ -2,5 +2,24 @@
   "name": "@func-js/utils",
   "version": "0.0.1",
   "author": "Cangshi",
-  "license": "MIT"
+  "_sourceName": "func.utils",
+  "main": "dist/func.utils.js",
+  "license": "MIT",
+  "scripts": {
+    "build-source": "webpack --progress --env production=false ",
+    "build-mini": "webpack --env production=true --progress",
+    "build": "yarn run build-source && yarn run build-mini",
+    "do-publish": "yarn run build && yarn publish --access public"
+  },
+  "files": [
+    "dist",
+    "types",
+    "readme.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "devDependencies": {
+    "webpack": "^5.7.0",
+    "webpack-cli": "^4.2.0"
+  }
 }

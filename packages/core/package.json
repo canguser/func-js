@@ -2,7 +2,28 @@
   "name": "@func-js/core",
   "version": "0.0.1",
   "description": "the core package of func-js",
-  "main": "index.js",
+  "main": "dist/func.core.js",
+  "_sourceName": "func.core",
   "author": "Cangshi",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build-source": "webpack --progress --env production=false ",
+    "build-mini": "webpack --env production=true --progress",
+    "build": "yarn run build-source && yarn run build-mini",
+    "do-publish": "yarn run build && yarn publish --access public"
+  },
+  "files": [
+    "dist",
+    "types",
+    "readme.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "dependencies": {
+    "@func-js/utils": "^0.0.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.7.0",
+    "webpack-cli": "^4.2.0"
+  }
 }
