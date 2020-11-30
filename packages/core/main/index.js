@@ -1,4 +1,4 @@
-import {FuncInstance} from "./classes/FuncInstance";
+import {FuncInstance, assignPrototype} from "./classes/FuncInstance";
 
 const defaultOptions = {
     instanceType: FuncInstance
@@ -9,6 +9,6 @@ export function FuncGiven(func, options) {
     const resultFunc = function (...args) {
         return func.apply(this, args);
     };
-    Object.setPrototypeOf(resultFunc, options.instanceType.prototype);
+    assignPrototype(resultFunc, options.instanceType);
     return resultFunc;
 }

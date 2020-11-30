@@ -8,7 +8,8 @@
   "private": true,
   "scripts": {
     "do-all-publish": "yarn workspaces run do-publish",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
