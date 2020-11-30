@@ -18,3 +18,13 @@ export function getSingleInstance(classType) {
     }
     return singleInstanceMap.get(classType);
 }
+
+export function assignInstance(origin, target) {
+    Object.setPrototypeOf(origin, Object.getPrototypeOf(target));
+    return origin;
+}
+
+export function assignPrototype(origin, targetType) {
+    Object.setPrototypeOf(origin, targetType.prototype);
+    return origin;
+}

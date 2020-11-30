@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "do-all-publish": "yarn workspaces run do-publish",
+    "build": "yarn workspaces run build",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
