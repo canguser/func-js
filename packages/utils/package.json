@@ -1,6 +1,6 @@
 {
   "name": "@func-js/utils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Cangshi",
   "_sourceName": "func.utils",
   "main": "dist/func.utils.js",
@@ -9,7 +9,8 @@
     "build-source": "webpack --progress --env production=false ",
     "build-mini": "webpack --env production=true --progress",
     "build": "yarn run build-source && yarn run build-mini",
-    "do-publish": "yarn run build && yarn publish --access public"
+    "do-publish": "yarn run build && yarn publish --access public",
+    "publish": "yarn publish --access public"
   },
   "files": [
     "dist",
