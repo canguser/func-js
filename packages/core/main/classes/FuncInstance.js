@@ -1,22 +1,13 @@
-import {assignInstance, genID} from "@func-js/utils";
+import {assignInstance, assignProperty, genID} from "@func-js/utils";
 
 export class FuncInstance extends Function {
 
     initAssign(target) {
         this.id = genID(7);
         // all func from FuncInstance has the uniqueId
-        if (target && target.uniqueId) {
-            this.uniqueId = target.uniqueId;
-        } else {
-            this.uniqueId = genID(7);
-        }
-
+        assignProperty(this, target, 'uniqueId', () => genID(7));
         // initial func trans
-        if (target && target.trans) {
-            this.trans = target.trans;
-        } else {
-            this.trans = {};
-        }
+        assignProperty(this, target, 'trans', () => {});
     }
 
     bind(context) {

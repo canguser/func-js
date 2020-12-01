@@ -1,4 +1,11 @@
 export class FuncInstance extends Function {
+
+    public id: string;
+    public trans: Object;
+    public uniqueId: string;
+
+    protected initAssign<T extends FuncInstance>(target?: T): void;
+
     public bind<T extends FuncInstance>(thisArg: any, ...argArray): T ;
 
     public before<T extends FuncInstance>(cb: (method?: Function, args?: Array<any>, extra?: { trans: Object, preventDefault: Function }) => void): T ;

@@ -11,3 +11,5 @@ export function generateStrategyMapper(mapper: Object, defaultValue?: any, ignor
 export function getHashCode(obj, stringify ?: boolean, deep ?: number): number;
 
 export function genID(length?: number): string;
+
+export function assignProperty(target: Object, origin: Object, key: any, defaultValue?: Function): string;

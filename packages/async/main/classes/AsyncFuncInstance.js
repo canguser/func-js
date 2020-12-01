@@ -1,7 +1,7 @@
 import {FuncInstance, give} from "@func-js/core";
 import {AsyncManager} from "./AsyncManager";
-import {PROCESS_START} from "../constants/EventConstants";
-import {generateStrategyMapper, getHashCode} from "@func-js/utils";
+import {PROCESS_END, PROCESS_START} from "../constants/EventConstants";
+import {assignProperty, generateStrategyMapper, getHashCode} from "@func-js/utils";
 
 export class CacheType {
     static LOCAL_STORAGE = Symbol('LOCAL_STORAGE');
@@ -14,6 +14,18 @@ const globalMemoryStorage = {};
 
 export class AsyncFuncInstance extends FuncInstance {
 
+    initAssign(target) {
+        super.initAssign(target);
+        assignProperty(this, target, 'asyncManager', () => undefined);
+    }
+
+    setManager(manager) {
+        if (manager && manager instanceof AsyncManager) {
+            this.asyncManager = manager;
+        }
+        return this;
+    }
+
     process(
         {
             start = undefined,
@@ -22,12 +34,13 @@ export class AsyncFuncInstance extends FuncInstance {
         } = {},
         asyncManager
     ) {
+        asyncManager = asyncManager ? asyncManager : this.asyncManager;
         if (asyncManager && asyncManager instanceof AsyncManager) {
             start = give(start).before(() => {
                 asyncManager.emit(PROCESS_START)
             });
             end = give(end).after((m, args, returnValue) => {
-                asyncManager.emit(PROCESS_START);
+                asyncManager.emit(PROCESS_END);
                 return returnValue;
             }, true);
         }
@@ -48,7 +61,7 @@ export class AsyncFuncInstance extends FuncInstance {
         } = {},
         asyncManager
     ) {
-
+        asyncManager = asyncManager ? asyncManager : this.asyncManager;
         const getMemoryStorage = () => {
             let storage;
             if (asyncManager && asyncManager instanceof AsyncManager) {

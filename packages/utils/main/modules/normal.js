@@ -75,3 +75,11 @@ export function flat(array, deep = Infinity) {
 export function genID(length) {
     return Number(Math.random().toString().substr(3, length) + Date.now()).toString(36);
 }
+
+export function assignProperty(target, origin, key, defaultValue) {
+    if (origin && origin[key] !== undefined) {
+        target[key] = origin[key];
+    } else if (typeof defaultValue === 'function') {
+        target[key] = defaultValue();
+    }
+}
