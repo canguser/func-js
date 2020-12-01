@@ -49,6 +49,7 @@ export class AsyncManager {
         this.options = {...managerDefaultOptions, ...options};
         this.memoryStorage = {};
         this.eventsMapper = {};
+        this.signMapper = {};
         initialProcess.call(this);
     }
 
@@ -114,6 +115,10 @@ export class AsyncManager {
 
     getMemoryStorage() {
         return this.memoryStorage;
+    }
+
+    getExistedSignMapper() {
+        return this.signMapper;
     }
 
     use(func, options = {}) {

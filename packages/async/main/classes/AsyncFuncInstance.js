@@ -1,7 +1,7 @@
 import {FuncInstance, give} from "@func-js/core";
 import {AsyncManager} from "./AsyncManager";
 import {METHOD_END, METHOD_START} from "../constants/EventConstants";
-import {assignProperty, generateStrategyMapper, getHashCode} from "@func-js/utils";
+import {assignProperty, generateStrategyMapper, genID, getHashCode} from "@func-js/utils";
 
 export const CacheType = {
     LOCAL_STORAGE: Symbol('LOCAL_STORAGE'),
@@ -11,6 +11,7 @@ export const CacheType = {
 };
 
 const globalMemoryStorage = {};
+const globalExistedSignMapper = {};
 
 export class AsyncFuncInstance extends FuncInstance {
 
@@ -24,6 +25,36 @@ export class AsyncFuncInstance extends FuncInstance {
             this.asyncManager = manager;
         }
         return this;
+    }
+
+    sign(local = '', {identity = genID(7), asyncManager} = {}) {
+        asyncManager = asyncManager ? asyncManager : this.asyncManager;
+
+        const getExistedSignMapper = () => {
+            let signMapper;
+            if (asyncManager && asyncManager instanceof AsyncManager) {
+                signMapper = asyncManager.getExistedSignMapper();
+            }
+            if (!signMapper) {
+                signMapper = globalExistedSignMapper;
+            }
+            return signMapper;
+        };
+
+        const signKey = local + this.uniqueId;
+        const signMapper = getExistedSignMapper();
+
+        return this.before(() => {
+            const signInfo = signMapper[signKey] || {};
+            signInfo.identity = identity;
+        }).after((m, args, returnValue) => {
+            const signInfo = signMapper[signKey] || {};
+            if (signInfo.identity === identity) {
+                return returnValue;
+            }
+            console.warn('An async method be override by the different identity');
+            return null;
+        }, true);
     }
 
     process(

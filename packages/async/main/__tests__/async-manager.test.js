@@ -61,5 +61,14 @@ describe(
                 ]
             )
         });
+
+        it('should [sign] method works', function () {
+            const manager = new AsyncManager();
+            const fetchInfo = manager.use(() => wait(100, 100)).sign('fetchInfo');
+
+            expect(fetchInfo()).resolves.toBe(100);
+            expect(wait(50).then(() => fetchInfo())).resolves.toBe(null);
+
+        });
     }
 );
