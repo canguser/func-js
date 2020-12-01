@@ -6,4 +6,8 @@ export class AsyncManager {
     static on(eventName, params) {
 
     }
+
+    getMemoryStorage() {
+
+    }
 }

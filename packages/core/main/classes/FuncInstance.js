@@ -2,12 +2,41 @@ import {assignInstance, genID} from "@func-js/utils";
 
 export class FuncInstance extends Function {
 
-    initAssign() {
+    initAssign(target) {
         this.id = genID(7);
+        // all func from FuncInstance has the uniqueId
+        if (target && target.uniqueId) {
+            this.uniqueId = target.uniqueId;
+        } else {
+            this.uniqueId = genID(7);
+        }
+
+        // initial func trans
+        if (target && target.trans) {
+            this.trans = target.trans;
+        } else {
+            this.trans = {};
+        }
     }
 
     bind(context) {
         return assignInstance(super.bind(context), this);
+    }
+
+    before(cb) {
+        const _this = this;
+        return assignInstance(
+            function (...args) {
+                let isPreventDefault = false;
+                const beforeValue = cb.apply(this, [_this, args, {
+                    preventDefault() {
+                        isPreventDefault = true;
+                    },
+                    trans: _this.trans
+                }]);
+                return isPreventDefault ? beforeValue : _this.apply(this, args);
+            }, this
+        );
     }
 
     after(cb, adaptAsync = false) {
@@ -17,13 +46,13 @@ export class FuncInstance extends Function {
                 const result = _this.apply(this, args);
                 if (adaptAsync && result instanceof Promise) {
                     return result.then(res => {
-                        return cb.apply(this, [_this, args, result]);
+                        return cb.apply(this, [_this, args, result, {trans: _this.trans}]);
                     }).catch(e => {
                         cb.apply(this, [_this, args, undefined]);
                         return Promise.reject(e);
                     })
                 }
-                return cb.apply(this, [_this, args, result])
+                return cb.apply(this, [_this, args, result, {trans: _this.trans}])
             }, this
         );
     }
@@ -93,15 +122,5 @@ export class FuncInstance extends Function {
 
             }, this
         )
-    }
-
-    before(cb) {
-        const _this = this;
-        return assignInstance(
-            function (...args) {
-                cb.apply(this, [_this, args]);
-                return _this.apply(this, args);
-            }, this
-        );
     }
 }

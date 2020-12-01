@@ -1,6 +1,7 @@
 import {FuncInstance, give} from "@func-js/core";
 import {AsyncManager} from "./AsyncManager";
 import {PROCESS_START} from "../constants/EventConstants";
+import {generateStrategyMapper, getHashCode} from "@func-js/utils";
 
 export class CacheType {
     static LOCAL_STORAGE = Symbol('LOCAL_STORAGE');
@@ -8,6 +9,8 @@ export class CacheType {
     static MEMORY = Symbol('MEMORY');
     static CUSTOM = Symbol('CUSTOM');
 }
+
+const globalMemoryStorage = {};
 
 export class AsyncFuncInstance extends FuncInstance {
 
@@ -39,10 +42,79 @@ export class AsyncFuncInstance extends FuncInstance {
         {
             type = CacheType.MEMORY,
             setter = (key, value) => undefined,
-            getter = (key) => undefined
-        } = {}
+            getter = (key) => undefined,
+            keyPrefix = '_cache_func_',
+            expire = 1000 * 60 * 5
+        } = {},
+        asyncManager
     ) {
 
+        const getMemoryStorage = () => {
+            let storage;
+            if (asyncManager && asyncManager instanceof AsyncManager) {
+                storage = asyncManager.getMemoryStorage();
+            }
+            if (!storage) {
+                storage = globalMemoryStorage;
+            }
+            return storage;
+        };
+
+        const memoryTypeDoing = () => {
+            const storage = getMemoryStorage();
+            setter = (key, value) => {
+                storage[key] = value;
+            };
+            getter = key => storage[key];
+        };
+
+        const typeStrategyMapper = generateStrategyMapper({
+            [CacheType.MEMORY]: memoryTypeDoing,
+            [CacheType.LOCAL_STORAGE]: () => {
+            },
+            [CacheType.SESSION_STORAGE]: () => {
+            },
+            [CacheType.CUSTOM]: () => {
+            },
+        }, memoryTypeDoing);
+
+        typeStrategyMapper[type]();
+
+        return this
+            .before(
+                (
+                    m, args,
+                    {
+                        preventDefault,
+                        trans
+                    }
+                ) => {
+                    const argsHashcode = getHashCode(args);
+                    const key = keyPrefix + this.uniqueId + argsHashcode;
+                    const cachedValue = getter(key);
+                    if (cachedValue && cachedValue.timestamp <= Date.now() + expire) {
+                        preventDefault();
+                        trans.isCached = true;
+                        return cachedValue.data;
+                    }
+                }
+            )
+            .after(
+                (
+                    m, args, returnValue,
+                    {trans}
+                ) => {
+                    if (!trans.isCached) {
+                        const argsHashcode = getHashCode(args);
+                        const key = keyPrefix + this.uniqueId + argsHashcode;
+                        setter(key, {
+                            data: returnValue,
+                            timestamp: Date.now()
+                        })
+                    }
+                    return returnValue;
+                }, true
+            )
     }
 
 

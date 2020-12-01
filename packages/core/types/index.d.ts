@@ -1,9 +1,9 @@
 export class FuncInstance extends Function {
     public bind<T extends FuncInstance>(thisArg: any, ...argArray): T ;
 
-    public before<T extends FuncInstance>(cb: (method?: Function, args?: Array<any>) => void): T ;
+    public before<T extends FuncInstance>(cb: (method?: Function, args?: Array<any>, extra?: { trans: Object, preventDefault: Function }) => void): T ;
 
-    public after<T extends FuncInstance>(cb: (method?: Function, args?: Array<any>, returnValue?: any) => any, adaptAsync?: boolean): T ;
+    public after<T extends FuncInstance>(cb: (method?: Function, args?: Array<any>, returnValue?: any, extra?: { trans: Object }) => any, adaptAsync?: boolean): T ;
 
     public then<T extends FuncInstance>(cb: (data?: any) => any): T ;
 

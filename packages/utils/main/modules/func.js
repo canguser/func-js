@@ -23,7 +23,7 @@ export function assignInstance(origin, target, initMethod = 'initAssign') {
     const prototype = Object.getPrototypeOf(target);
     Object.setPrototypeOf(origin, prototype);
     if (typeof prototype[initMethod] === 'function') {
-        prototype[initMethod].call(origin);
+        prototype[initMethod].call(origin, target);
     }
     return origin;
 }

@@ -1,13 +1,18 @@
 export function generateStrategyMapper(mapper = {}, defaultValue, ignoreCase = false) {
     return new Proxy({...mapper}, {
         get(target, p, receiver) {
-            if (Object.getOwnPropertyNames(target)
-                .map(name => ignoreCase ? name.toLowerCase() : name).includes(ignoreCase ? p.toLowerCase() : p)) {
+            if (getOwnProperties(target)
+                .map(property => ignoreCase && typeof property === 'string' ? property.toLowerCase() : property)
+                .includes(ignoreCase && typeof p === 'string' ? p.toLowerCase() : p)) {
                 return Reflect.get(target, p, receiver);
             }
             return defaultValue;
         }
     });
+}
+
+export function getOwnProperties(target) {
+    return Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target));
 }
 
 export function getStrHashCode(str) {
