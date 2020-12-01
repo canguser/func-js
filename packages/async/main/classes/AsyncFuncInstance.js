@@ -3,12 +3,12 @@ import {AsyncManager} from "./AsyncManager";
 import {PROCESS_END, PROCESS_START} from "../constants/EventConstants";
 import {assignProperty, generateStrategyMapper, getHashCode} from "@func-js/utils";
 
-export class CacheType {
-    static LOCAL_STORAGE = Symbol('LOCAL_STORAGE');
-    static SESSION_STORAGE = Symbol('SESSION_STORAGE');
-    static MEMORY = Symbol('MEMORY');
-    static CUSTOM = Symbol('CUSTOM');
-}
+export const CacheType = {
+    LOCAL_STORAGE: Symbol('LOCAL_STORAGE'),
+    SESSION_STORAGE: Symbol('SESSION_STORAGE'),
+    MEMORY: Symbol('MEMORY'),
+    CUSTOM: Symbol('CUSTOM')
+};
 
 const globalMemoryStorage = {};
 
