@@ -85,7 +85,7 @@ export class AsyncFuncInstance extends FuncInstance {
             start = give(start).before(() => {
                 asyncManager.emit(METHOD_START)
             });
-            end = give(end).after((m, args, returnValue) => {
+            end = give(end).after(({lastValue: returnValue}) => {
                 asyncManager.emit(METHOD_END);
                 return returnValue;
             }, true);
