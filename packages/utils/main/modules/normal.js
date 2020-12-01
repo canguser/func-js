@@ -31,7 +31,7 @@ export function getHashCode(obj, stringify = false, deep = 10) {
     if (stringify) {
         return getStrHashCode(JSON.stringify(obj));
     }
-    return this.getStrHashCode(
+    return getStrHashCode(
         getKeyValues(obj, deep).join('')
     );
 }

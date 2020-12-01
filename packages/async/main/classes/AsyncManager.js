@@ -1,13 +1,18 @@
 import {AsyncFuncInstance} from "./AsyncFuncInstance";
 import {give} from "@func-js/core";
 import {genID, getHashCode} from "@func-js/utils";
+import {METHOD_END, METHOD_START, PROCESS_END, PROCESS_START} from "../constants/EventConstants";
 
-const defaultOptions = {
+const managerDefaultOptions = {
+    processIdentity: ''
+};
+
+const defaultOptions = () => ({
     managerType: AsyncManager,
     instanceType: AsyncFuncInstance,
     managerArgs: [],
     manager: undefined
-};
+});
 
 const eventOptions = {
     isOnce: false,
@@ -15,11 +20,36 @@ const eventOptions = {
     identity: ''
 };
 
+function initialProcess() {
+    const {
+        processIdentity = managerDefaultOptions.processIdentity
+    } = this.options;
+
+    let inProcesses = 0;
+
+    this.on(METHOD_START, () => {
+        if (inProcesses === 0) {
+            this.emit(PROCESS_START, {identity: processIdentity});
+        }
+        inProcesses++;
+    });
+
+    this.on(METHOD_END, () => {
+        inProcesses--;
+        if (inProcesses <= 0) {
+            inProcesses = 0;
+            this.emit(PROCESS_END, {identity: processIdentity});
+        }
+    });
+}
+
 export class AsyncManager {
 
-    constructor() {
+    constructor(options) {
+        this.options = {...managerDefaultOptions, ...options};
         this.memoryStorage = {};
         this.eventsMapper = {};
+        initialProcess.call(this);
     }
 
     emit(eventName, {identity = eventOptions.identity, params = {}} = {}) {
@@ -37,7 +67,7 @@ export class AsyncManager {
                     }
                 }
             });
-        events = events.filter(e => !e.options.isOnce && e.identity === identity);
+        events = events.filter(e => !e.options.isOnce && e.options.identity === identity);
         this.eventsMapper[eventName] = events;
     }
 
@@ -50,6 +80,7 @@ export class AsyncManager {
             callback, options, eventIdentity
         });
         this.eventsMapper[eventName] = events;
+        return eventIdentity;
     }
 
     off(eventIdentity) {
@@ -95,12 +126,12 @@ export class AsyncManager {
     }
 
     static use(func, options = {}) {
-        options = {...defaultOptions, ...options};
+        options = {...defaultOptions(), ...options};
         const {manager} = options;
         return give(func, {
             instanceType: options.instanceType
         }).setManager(
-            new manager && manager instanceof AsyncManager ? manager : options.managerType(...options.managerArgs)
+            manager && manager instanceof AsyncManager ? manager : new options.managerType(...options.managerArgs)
         );
     };
 }

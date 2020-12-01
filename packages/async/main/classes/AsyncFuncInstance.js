@@ -1,6 +1,6 @@
 import {FuncInstance, give} from "@func-js/core";
 import {AsyncManager} from "./AsyncManager";
-import {PROCESS_END, PROCESS_START} from "../constants/EventConstants";
+import {METHOD_END, METHOD_START} from "../constants/EventConstants";
 import {assignProperty, generateStrategyMapper, getHashCode} from "@func-js/utils";
 
 export const CacheType = {
@@ -37,10 +37,10 @@ export class AsyncFuncInstance extends FuncInstance {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
         if (asyncManager && asyncManager instanceof AsyncManager) {
             start = give(start).before(() => {
-                asyncManager.emit(PROCESS_START)
+                asyncManager.emit(METHOD_START)
             });
             end = give(end).after((m, args, returnValue) => {
-                asyncManager.emit(PROCESS_END);
+                asyncManager.emit(METHOD_END);
                 return returnValue;
             }, true);
         }
@@ -107,8 +107,9 @@ export class AsyncFuncInstance extends FuncInstance {
                     const cachedValue = getter(key);
                     if (cachedValue && cachedValue.timestamp <= Date.now() + expire) {
                         preventDefault();
+                        const {data, isAsync = false} = cachedValue;
                         trans.isCached = true;
-                        return cachedValue.data;
+                        return isAsync ? Promise.resolve(data) : data;
                     }
                 }
             )
@@ -120,13 +121,24 @@ export class AsyncFuncInstance extends FuncInstance {
                     if (!trans.isCached) {
                         const argsHashcode = getHashCode(args);
                         const key = keyPrefix + this.uniqueId + argsHashcode;
+                        if (returnValue instanceof Promise) {
+                            return returnValue.then(result => {
+                                setter(key, {
+                                    data: result,
+                                    timestamp: Date.now(),
+                                    isAsync: true
+                                });
+                                return result;
+                            });
+                        }
                         setter(key, {
                             data: returnValue,
                             timestamp: Date.now()
                         })
                     }
+                    delete trans.isCached;
                     return returnValue;
-                }, true
+                }
             )
     }
 

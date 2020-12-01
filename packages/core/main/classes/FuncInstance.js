@@ -7,7 +7,7 @@ export class FuncInstance extends Function {
         // all func from FuncInstance has the uniqueId
         assignProperty(this, target, 'uniqueId', () => genID(7));
         // initial func trans
-        assignProperty(this, target, 'trans', () => {});
+        this.trans = {};
     }
 
     bind(context) {
@@ -37,7 +37,7 @@ export class FuncInstance extends Function {
                 const result = _this.apply(this, args);
                 if (adaptAsync && result instanceof Promise) {
                     return result.then(res => {
-                        return cb.apply(this, [_this, args, result, {trans: _this.trans}]);
+                        return cb.apply(this, [_this, args, res, {trans: _this.trans}]);
                     }).catch(e => {
                         cb.apply(this, [_this, args, undefined]);
                         return Promise.reject(e);
