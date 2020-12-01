@@ -11,24 +11,24 @@ function wait(ms, args) {
 
 describe(
     'async-manager', () => {
-        it('should static use method', () => {
-            const sum = AsyncManager.use((a, b) => wait(100, a + b));
-            expect(sum(5, 6)).resolves.toBe(11);
+        it('should static [use] method', () => {
+            const sum = new AsyncManager().use((a, b) => wait(0, a + b));
             expect(sum.asyncManager).toBeInstanceOf(AsyncManager);
+            return expect(sum(5, 6)).resolves.toBe(11);
         });
 
-        it('should works with cache method', () => {
+        it('should works with [cache] method', () => {
             expect.assertions(3);
-            const sum = AsyncManager.use((a, b) => wait(100, 100)
+            const sum1 = new AsyncManager().use((a, b) => wait(100, 100)
                 .then(res => {
                     expect(res).toBe(100);
                     return a + b;
                 })).cache();
 
-            return sum(1, 2).then(() => sum(1, 2))
-                .then(() => sum(3, 4))
-                .then(() => sum(3, 4))
-                .then(() => sum(5, 6));
+            return sum1(1, 2).then(() => sum1(1, 2))
+                .then(() => sum1(3, 4))
+                .then(() => sum1(3, 4))
+                .then(() => sum1(5, 6));
         });
 
         it('should [process] method works', function () {
@@ -64,11 +64,14 @@ describe(
 
         it('should [sign] method works', function () {
             const manager = new AsyncManager();
-            const fetchInfo = manager.use(() => wait(100, 100)).sign('fetchInfo');
+            const fetchInfo = manager.use(() => wait(500, 100)).sign('fetchInfo');
 
-            expect(fetchInfo()).resolves.toBe(100);
-            expect(wait(50).then(() => fetchInfo())).resolves.toBe(null);
-
+            return Promise.all(
+                [
+                    expect(fetchInfo()).resolves.toBe(null),
+                    expect(wait(250).then(() => fetchInfo())).resolves.toBe(100)
+                ]
+            )
         });
     }
 );

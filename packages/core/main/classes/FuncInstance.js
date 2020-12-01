@@ -6,46 +6,123 @@ export class FuncInstance extends Function {
         this.id = genID(7);
         // all func from FuncInstance has the uniqueId
         assignProperty(this, target, 'uniqueId', () => genID(7));
-        // initial func trans
-        this.trans = {};
     }
 
     bind(context) {
         return assignInstance(super.bind(context), this);
     }
 
-    before(cb) {
-        const _this = this;
-        return assignInstance(
-            function (...args) {
-                let isPreventDefault = false;
-                const beforeValue = cb.apply(this, [_this, args, {
-                    preventDefault() {
-                        isPreventDefault = true;
-                    },
-                    trans: _this.trans
-                }]);
-                return isPreventDefault ? beforeValue : _this.apply(this, args);
-            }, this
-        );
+    before(cb, adaptAsync = false) {
+        return this.surround(
+            {
+                before: cb,
+                adaptAsync
+            }
+        )
     }
 
     after(cb, adaptAsync = false) {
-        const _this = this;
+        return this.surround(
+            {
+                after: cb,
+                adaptAsync
+            }
+        )
+    }
+
+    surround(
+        {
+            before = undefined,
+            after = undefined,
+            onError = undefined,
+            adaptAsync = false
+        }
+    ) {
+        const lastOrigin = this;
+
+        if (typeof lastOrigin !== 'function') {
+            return lastOrigin;
+        }
+
         return assignInstance(
             function (...args) {
-                const result = _this.apply(this, args);
-                if (adaptAsync && result instanceof Promise) {
-                    return result.then(res => {
-                        return cb.apply(this, [_this, args, res, {trans: _this.trans}]);
-                    }).catch(e => {
-                        cb.apply(this, [_this, args, undefined]);
-                        return Promise.reject(e);
-                    })
+                const trans = {};
+                const baseParams = {
+                    origin, args, trans
+                };
+                const validErrorMethod = typeof onError === 'function';
+                try {
+                    let preventDefault = false;
+                    // parsing before
+                    let beforeResult;
+                    if (typeof before === 'function') {
+                        beforeResult = before.call(this, {
+                            ...baseParams,
+                            preventDefault() {
+                                preventDefault = true;
+                            }
+                        });
+                        if (preventDefault) {
+                            return beforeResult;
+                        }
+                    }
+
+                    let returnValue;
+                    if (beforeResult instanceof Promise && adaptAsync) {
+                        returnValue = beforeResult.then(
+                            () => {
+                                return lastOrigin.apply(this, args);
+                            }
+                        )
+                    } else {
+                        returnValue = lastOrigin.apply(this, args);
+                    }
+
+                    // parsing origin
+                    if (typeof after === 'function') {
+                        if (returnValue instanceof Promise && adaptAsync) {
+                            returnValue = returnValue.then(value => after.call(this, {...baseParams, lastValue: value}))
+                        } else {
+                            returnValue = after.call(this, {...baseParams, lastValue: returnValue});
+                        }
+                    }
+
+                    if (returnValue instanceof Promise && adaptAsync && validErrorMethod) {
+                        return returnValue.catch(error => {
+                            let isSolved = false;
+                            let message = '';
+                            const resolve = (msg) => {
+                                message = msg;
+                                isSolved = true;
+                            };
+                            return Promise.resolve(onError.call(this, {...baseParams, error, resolve}))
+                                .then(solution => {
+                                    if (!isSolved) {
+                                        throw error;
+                                    }
+                                    return message || solution;
+                                });
+                        });
+                    }
+                    return returnValue;
+                } catch (error) {
+                    if (!validErrorMethod) {
+                        throw error;
+                    }
+                    let isSolved = false;
+                    let message = '';
+                    const resolve = (msg) => {
+                        message = msg;
+                        isSolved = true;
+                    };
+                    const result = onError.call(this, {...baseParams, error, resolve});
+                    if (!isSolved) {
+                        throw error;
+                    }
+                    return message || result;
                 }
-                return cb.apply(this, [_this, args, result, {trans: _this.trans}])
             }, this
-        );
+        )
     }
 
     then(cb) {

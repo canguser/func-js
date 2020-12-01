@@ -19,13 +19,13 @@ describe('index.js', () => {
 
         const a = give(doIt)
             .before(
-                (m, args) => {
+                ({args}) => {
                     expect(args[0]).toBe(number);
                     args[0] += 1;
                 }
             )
             .after(
-                (m, args, value) => {
+                ({args, lastValue: value}) => {
                     expect(value).toBe(number + 1);
                     expect(args[0]).toBe(number);
                     return value + 1;

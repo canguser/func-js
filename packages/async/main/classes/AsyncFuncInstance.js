@@ -27,7 +27,7 @@ export class AsyncFuncInstance extends FuncInstance {
         return this;
     }
 
-    sign(local = '', {identity = genID(7), asyncManager} = {}) {
+    sign(local = '', {identity = genID, asyncManager} = {}) {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
 
         const getExistedSignMapper = () => {
@@ -44,17 +44,32 @@ export class AsyncFuncInstance extends FuncInstance {
         const signKey = local + this.uniqueId;
         const signMapper = getExistedSignMapper();
 
-        return this.before(() => {
-            const signInfo = signMapper[signKey] || {};
-            signInfo.identity = identity;
-        }).after((m, args, returnValue) => {
-            const signInfo = signMapper[signKey] || {};
-            if (signInfo.identity === identity) {
-                return returnValue;
+        return this.surround(
+            {
+                before: ({trans}) => {
+                    let {keptIdentity} = trans;
+                    if (keptIdentity === undefined) {
+                        const signInfo = signMapper[signKey] || {};
+                        signInfo.identity = keptIdentity = identity();
+                        signMapper[signKey] = signInfo;
+                        trans.keptIdentity = keptIdentity;
+                    }
+                },
+                after: ({trans, lastValue: returnValue}) => {
+                    const signInfo = signMapper[signKey] || {};
+                    let {keptIdentity} = trans;
+                    if (signInfo.identity === keptIdentity || keptIdentity === undefined) {
+                        if (keptIdentity) {
+                            delete trans.keptIdentity;
+                        }
+                        return returnValue;
+                    }
+                    console.warn('An async method be override by the different identity');
+                    return null;
+                },
+                adaptAsync: true
             }
-            console.warn('An async method be override by the different identity');
-            return null;
-        }, true);
+        );
     }
 
     process(
@@ -75,11 +90,15 @@ export class AsyncFuncInstance extends FuncInstance {
                 return returnValue;
             }, true);
         }
-        return this.before(() => start.call(context || this))
-            .after((m, args, returnValue) => {
+
+        return this.surround({
+            before: () => start.call(context || this),
+            after: ({lastValue: returnValue}) => {
                 end.call(context || this);
                 return returnValue;
-            }, true)
+            },
+            adaptAsync: true
+        });
     }
 
     cache(
@@ -124,53 +143,46 @@ export class AsyncFuncInstance extends FuncInstance {
 
         typeStrategyMapper[type]();
 
-        return this
-            .before(
-                (
-                    m, args,
-                    {
-                        preventDefault,
-                        trans
-                    }
-                ) => {
+        return this.surround({
+            before: (
+                {
+                    preventDefault,
+                    trans, args
+                }
+            ) => {
+                const argsHashcode = getHashCode(args);
+                const key = keyPrefix + this.uniqueId + argsHashcode;
+                const cachedValue = getter(key);
+                if (cachedValue && cachedValue.timestamp <= Date.now() + expire) {
+                    preventDefault();
+                    const {data, isAsync = false} = cachedValue;
+                    trans.isCached = true;
+                    return isAsync ? Promise.resolve(data) : data;
+                }
+            },
+            after: ({trans, args, lastValue: returnValue}) => {
+                if (!trans.isCached) {
                     const argsHashcode = getHashCode(args);
                     const key = keyPrefix + this.uniqueId + argsHashcode;
-                    const cachedValue = getter(key);
-                    if (cachedValue && cachedValue.timestamp <= Date.now() + expire) {
-                        preventDefault();
-                        const {data, isAsync = false} = cachedValue;
-                        trans.isCached = true;
-                        return isAsync ? Promise.resolve(data) : data;
-                    }
-                }
-            )
-            .after(
-                (
-                    m, args, returnValue,
-                    {trans}
-                ) => {
-                    if (!trans.isCached) {
-                        const argsHashcode = getHashCode(args);
-                        const key = keyPrefix + this.uniqueId + argsHashcode;
-                        if (returnValue instanceof Promise) {
-                            return returnValue.then(result => {
-                                setter(key, {
-                                    data: result,
-                                    timestamp: Date.now(),
-                                    isAsync: true
-                                });
-                                return result;
+                    if (returnValue instanceof Promise) {
+                        return returnValue.then(result => {
+                            setter(key, {
+                                data: result,
+                                timestamp: Date.now(),
+                                isAsync: true
                             });
-                        }
-                        setter(key, {
-                            data: returnValue,
-                            timestamp: Date.now()
-                        })
+                            return result;
+                        });
                     }
-                    delete trans.isCached;
-                    return returnValue;
+                    setter(key, {
+                        data: returnValue,
+                        timestamp: Date.now()
+                    })
                 }
-            )
+                return returnValue;
+            },
+            adaptAsync: true
+        });
     }
 
 
