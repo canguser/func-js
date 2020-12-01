@@ -1,0 +1,31 @@
+{
+  "name": "@func-js/async",
+  "version": "0.0.1",
+  "description": "the async package of func-js",
+  "main": "dist/func.async.js",
+  "_sourceName": "func.async",
+  "author": "Cangshi",
+  "license": "MIT",
+  "scripts": {
+    "build-source": "webpack --progress --env production=false ",
+    "build-mini": "webpack --env production=true --progress",
+    "build": "yarn run build-source && yarn run build-mini",
+    "do-publish": "yarn run build && yarn publish --access public"
+  },
+  "files": [
+    "dist",
+    "types",
+    "readme.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "types": "types/index.d.ts",
+  "dependencies": {
+    "@func-js/utils": "^0.0.1",
+    "@func-js/core": "^0.0.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.7.0",
+    "webpack-cli": "^4.2.0"
+  }
+}

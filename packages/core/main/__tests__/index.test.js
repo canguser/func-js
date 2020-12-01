@@ -1,4 +1,4 @@
-import {FuncGiven} from "../index";
+import {give} from "../index";
 import {FuncInstance} from "../classes/FuncInstance";
 
 function wait(ms, args) {
@@ -17,7 +17,7 @@ describe('index.js', () => {
 
         const number = 100;
 
-        const a = FuncGiven(doIt)
+        const a = give(doIt)
             .before(
                 (m, args) => {
                     expect(args[0]).toBe(number);
@@ -38,7 +38,7 @@ describe('index.js', () => {
     it('should works with [then] method', function () {
         expect.assertions(1);
         const param = 1;
-        const action = FuncGiven(wait).then(
+        const action = give(wait).then(
             args => args[0]
         );
         return expect(action(0, [param])).resolves.toBe(param);
@@ -48,14 +48,14 @@ describe('index.js', () => {
     it('should works with [catch] method', function () {
         expect.assertions(3);
         const param = 1;
-        const action = FuncGiven(wait)
+        const action = give(wait)
             .then(
                 args => {
                     return Promise.reject(args[0]);
                 }
             ).catch(e => e);
 
-        const action2 = FuncGiven(
+        const action2 = give(
             function () {
                 throw new Error('hahah');
             }
@@ -72,7 +72,7 @@ describe('index.js', () => {
             return this.name;
         }
 
-        const newFunc = FuncGiven(callName)
+        const newFunc = give(callName)
             .bind({
                 name: 'nihao'
             });
@@ -85,14 +85,14 @@ describe('index.js', () => {
     it('should works for [finally] method', function () {
         expect.assertions(8);
 
-        const func1 = FuncGiven(wait)
+        const func1 = give(wait)
             .finally(
                 () => {
                     expect(1).toBe(1);
                 }
             );
 
-        const func2 = FuncGiven(function () {
+        const func2 = give(function () {
             throw new Error('hahaha');
         }).finally(
             () => {
@@ -100,7 +100,7 @@ describe('index.js', () => {
             }
         );
 
-        const func3 = FuncGiven(function () {
+        const func3 = give(function () {
         }).finally(
             () => {
                 expect(1).toBe(1);
@@ -129,7 +129,7 @@ describe('index.js', () => {
         const finallyMethod = Promise.prototype.finally;
         delete Promise.prototype.finally;
 
-        const func1 = FuncGiven(wait)
+        const func1 = give(wait)
             .finally(
                 () => {
                     expect(1).toBe(1);

@@ -1,16 +1,28 @@
-import {assignInstance} from "@func-js/utils";
+import {assignInstance, genID} from "@func-js/utils";
 
 export class FuncInstance extends Function {
+
+    initAssign() {
+        this.id = genID(7);
+    }
 
     bind(context) {
         return assignInstance(super.bind(context), this);
     }
 
-    after(cb) {
+    after(cb, adaptAsync = false) {
         const _this = this;
         return assignInstance(
             function (...args) {
                 const result = _this.apply(this, args);
+                if (adaptAsync && result instanceof Promise) {
+                    return result.then(res => {
+                        return cb.apply(this, [_this, args, result]);
+                    }).catch(e => {
+                        cb.apply(this, [_this, args, undefined]);
+                        return Promise.reject(e);
+                    })
+                }
                 return cb.apply(this, [_this, args, result])
             }, this
         );

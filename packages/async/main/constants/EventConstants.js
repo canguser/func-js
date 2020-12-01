@@ -1,0 +1,2 @@
+export const PROCESS_START = 'PROCESS_START';
+export const PROCESS_END = 'PROCESS_END';

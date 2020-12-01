@@ -19,12 +19,20 @@ export function getSingleInstance(classType) {
     return singleInstanceMap.get(classType);
 }
 
-export function assignInstance(origin, target) {
-    Object.setPrototypeOf(origin, Object.getPrototypeOf(target));
+export function assignInstance(origin, target, initMethod = 'initAssign') {
+    const prototype = Object.getPrototypeOf(target);
+    Object.setPrototypeOf(origin, prototype);
+    if (typeof prototype[initMethod] === 'function') {
+        prototype[initMethod].call(origin);
+    }
     return origin;
 }
 
-export function assignPrototype(origin, targetType) {
-    Object.setPrototypeOf(origin, targetType.prototype);
+export function assignPrototype(origin, targetType, initMethod = 'initAssign') {
+    const prototype = targetType.prototype;
+    Object.setPrototypeOf(origin, prototype);
+    if (typeof prototype[initMethod] === 'function') {
+        prototype[initMethod].call(origin);
+    }
     return origin;
 }
