@@ -1,17 +1,23 @@
 {
   "name": "@func-js/core",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "the core package of func-js",
   "main": "dist/func.core.js",
+  "mainMini": "dist/func.core.mini.js",
+  "module": "dist/func.core.es.js",
+  "libName": "$funcCore",
   "_sourceName": "func.core",
   "author": "Cangshi",
   "license": "MIT",
   "scripts": {
     "build-source": "webpack --progress --env production=false ",
     "build-mini": "webpack --env production=true --progress",
-    "build": "yarn run build-source && yarn run build-mini",
+    "build": "yarn run rollup && yarn run rollup:mini && yarn run rollup:esm",
     "do-publish": "yarn run build && yarn publish --access public",
-    "run-publish": "yarn publish --access public"
+    "run-publish": "yarn publish --access public",
+    "rollup": "rollup -c",
+    "rollup:mini": "cross-env NODE_ENV=prod rollup -c",
+    "rollup:esm": "cross-env NODE_ENV=esm rollup -c"
   },
   "files": [
     "dist",
@@ -22,13 +28,21 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@func-js/utils": "^0.0.5"
+    "@func-js/utils": "^0.0.6"
   },
   "devDependencies": {
     "webpack": "^5.7.0",
     "webpack-cli": "^4.2.0",
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
-    "babel-loader": "^8.2.2"
+    "@babel/polyfill": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "babel-loader": "^8.2.2",
+    "rollup": "^2.34.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "cross-env": "^7.0.3"
   }
 }
