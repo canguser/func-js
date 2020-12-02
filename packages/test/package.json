@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "@func-js/test",
+  "version": "0.0.5",
+  "description": "the test package of func-js",
+  "main": "dist/func.test.js",
+  "_sourceName": "func.test",
+  "author": "Cangshi",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'egnore test'",
+    "do-publish": "echo 'egnore test'",
+    "run-publish": "echo 'egnore test'"
+  },
+  "files": [
+    "dist",
+    "types",
+    "readme.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "types": "types/index.d.ts",
+  "dependencies": {
+    "@func-js/utils": "^0.0.5",
+    "@func-js/core": "^0.0.5",
+    "@func-js/async": "^0.0.5"
+  },
+  "devDependencies": {
+    "webpack": "^5.7.0",
+    "webpack-cli": "^4.2.0",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.2"
+  }
+}

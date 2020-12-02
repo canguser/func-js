@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "do-all-publish": "yarn workspaces run publish",
+    "do-all-publish": "yarn workspaces run run-publish",
     "build": "yarn workspace @func-js/utils run build && yarn workspace @func-js/core run build && yarn workspace @func-js/async run build",
     "test": "jest",
     "test:coverage": "jest --coverage"

@@ -16,6 +16,15 @@ module.exports = env => {
             path: path.resolve(__dirname, "dist"),
             libraryTarget: "umd",
             globalObject: "typeof self !== 'undefined' ? self : this"
-        }
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /(node_modules)/,
+                    loader: 'babel-loader'
+                }
+            ]
+        },
     }
 };

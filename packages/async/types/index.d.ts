@@ -1,4 +1,4 @@
-import {FuncInstance} from "@func-js/core";
+import {FuncInstance} from "@func-js/core/types";
 
 export const PROCESS_START: string;
 export const PROCESS_END: string;
@@ -21,7 +21,7 @@ interface DefaultOptions {
 
 export class AsyncManager {
 
-    constructor(options: Object);
+    constructor(options?: Object);
 
     public emit(
         eventName: string, options?: { identity?: string, params?: Object }
@@ -35,11 +35,13 @@ export class AsyncManager {
 
     public off(eventIdentity: string | boolean): void
 
-    public use<T extends AsyncFuncInstance>(func: Function): T
+    public use<T extends AsyncFuncInstance>(func?: Function): T | Function
 
     public getMemoryStorage(): Object
 
     public getExistedSignMapper(): Object
+
+    public static use<T extends AsyncFuncInstance>(func?: Function): T | Function
 }
 
 export enum CacheType {
@@ -55,7 +57,7 @@ export class AsyncFuncInstance extends FuncInstance {
     public sign<T extends AsyncFuncInstance, F extends AsyncManager>(
         local: string,
         options?: { identity?: Function, asyncManager?: F }
-    ): T
+    ): T | Function
 
     public process<T extends AsyncFuncInstance, F extends AsyncManager>(
         options?: {
@@ -64,7 +66,7 @@ export class AsyncFuncInstance extends FuncInstance {
             context?: Object
         },
         asyncManager?: F
-    ): T
+    ): T | Function
 
     public cache<T extends AsyncFuncInstance, F extends AsyncManager>(
         options?: {
@@ -74,5 +76,5 @@ export class AsyncFuncInstance extends FuncInstance {
             keyPrefix?: string,
             expire?: number
         }, asyncManager?: F
-    ): T
+    ): T | Function
 }

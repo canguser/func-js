@@ -1,16 +1,15 @@
 export class FuncInstance extends Function {
 
     public id: string;
-    public trans: Object;
     public uniqueId: string;
 
     protected initAssign<T extends FuncInstance>(target?: T): void;
 
-    public bind<T extends FuncInstance>(thisArg: any, ...argArray): T ;
+    public bind<T extends FuncInstance>(thisArg: any, ...argArray): T | Function ;
 
-    public before<T extends FuncInstance>(cb: (params?: { origin?: Object, args?: Array<any>, preventDefault?: Function }, adaptAsync?: boolean) => any): T ;
+    public before<T extends FuncInstance>(cb: (params?: { origin?: Object, args?: Array<any>, preventDefault?: Function }, adaptAsync?: boolean) => any): T | Function ;
 
-    public after<T extends FuncInstance>(cb: (params?: { origin?: Object, args?: Array<any>, lastValue?: any }) => any, adaptAsync?: boolean): T ;
+    public after<T extends FuncInstance>(cb: (params?: { origin?: Object, args?: Array<any>, lastValue?: any }) => any, adaptAsync?: boolean): T | Function ;
 
     public surround<T extends FuncInstance>(options?: {
         before?: (
@@ -29,17 +28,17 @@ export class FuncInstance extends Function {
             }
         ) => any,
         adaptAsync?: boolean,
-    }): T ;
+    }): T | Function ;
 
-    public then<T extends FuncInstance>(cb: (data?: any) => any): T ;
+    public then<T extends FuncInstance>(cb: (data?: any) => any): T | Function ;
 
-    public catch<T extends FuncInstance>(cb: (data?: any) => any): T ;
+    public catch<T extends FuncInstance>(cb: (data?: any) => any): T | Function ;
 
-    public finally<T extends FuncInstance>(cb: () => any): T ;
+    public finally<T extends FuncInstance>(cb: () => any): T | Function ;
 }
 
 interface FuncOptions {
     instanceType?: FuncInstance
 }
 
-export function give<T extends Function, F extends FuncInstance>(func?: T | undefined, options?: FuncOptions): F;
+export function give<T extends Function, F extends FuncInstance>(func?: T | undefined, options?: FuncOptions): F | Function;
