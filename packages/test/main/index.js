@@ -6,3 +6,5 @@ export const func = AsyncManager.use(function () {
 });
 
 func();
+
+give().before(({args})=>{})

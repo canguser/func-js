@@ -1,5 +1,8 @@
 import {assignInstance, assignProperty, genID} from "@func-js/utils";
 
+/**
+ *
+ */
 export class FuncInstance extends Function {
 
     /**
@@ -9,27 +12,30 @@ export class FuncInstance extends Function {
 
     /**
      * @callback beforeCallback
-     * @param origin{Function=}
-     * @param args{Array<*>=}
-     * @param preventDefault{Function=}
-     * @param trans{Object=}
+     * @param params{Object=}
+     * @param params.origin{Function=}
+     * @param params.args{Array<*>=}
+     * @param params.preventDefault{Function=}
+     * @param params.trans{Object=}
      */
 
     /**
      * @callback afterCallback
-     * @param origin{Function=}
-     * @param args{Array<*>=}
-     * @param lastValue{*=}
-     * @param trans{Object=}
+     * @param params{Object=}
+     * @param params.origin{Function=}
+     * @param params.args{Array<*>=}
+     * @param params.lastValue{*=}
+     * @param params.trans{Object=}
      */
 
     /**
      * @callback errorCallback
-     * @param origin{Function=}
-     * @param args{Array<*>=}
-     * @param error{*=}
-     * @param resolve{resolveCallback=}
-     * @param trans{Object=}
+     * @param params{Object=}
+     * @param params.origin{Function=}
+     * @param params.args{Array<*>=}
+     * @param params.error{*=}
+     * @param params.resolve{resolveCallback=}
+     * @param params.trans{Object=}
      */
 
     /**

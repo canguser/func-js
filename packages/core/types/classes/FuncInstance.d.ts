@@ -1,3 +1,6 @@
+/**
+ *
+ */
 export class FuncInstance extends Function {
     constructor(...args: string[]);
     /**
@@ -6,25 +9,28 @@ export class FuncInstance extends Function {
      */
     /**
      * @callback beforeCallback
-     * @param origin{Function=}
-     * @param args{Array<*>=}
-     * @param preventDefault{Function=}
-     * @param trans{Object=}
+     * @param params{Object=}
+     * @param params.origin{Function=}
+     * @param params.args{Array<*>=}
+     * @param params.preventDefault{Function=}
+     * @param params.trans{Object=}
      */
     /**
      * @callback afterCallback
-     * @param origin{Function=}
-     * @param args{Array<*>=}
-     * @param lastValue{*=}
-     * @param trans{Object=}
+     * @param params{Object=}
+     * @param params.origin{Function=}
+     * @param params.args{Array<*>=}
+     * @param params.lastValue{*=}
+     * @param params.trans{Object=}
      */
     /**
      * @callback errorCallback
-     * @param origin{Function=}
-     * @param args{Array<*>=}
-     * @param error{*=}
-     * @param resolve{resolveCallback=}
-     * @param trans{Object=}
+     * @param params{Object=}
+     * @param params.origin{Function=}
+     * @param params.args{Array<*>=}
+     * @param params.error{*=}
+     * @param params.resolve{resolveCallback=}
+     * @param params.trans{Object=}
      */
     /**
      * @private
@@ -37,13 +43,13 @@ export class FuncInstance extends Function {
      * @param adaptAsync{boolean}
      * @return {FuncInstance|Function}
      */
-    before(cb: (origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any, adaptAsync?: boolean): FuncInstance | Function;
+    before(cb: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any, adaptAsync?: boolean): FuncInstance | Function;
     /**
      * @param cb{afterCallback}
      * @param adaptAsync{boolean}
      * @return {FuncInstance|Function}
      */
-    after(cb: (origin?: Function | undefined, args?: Array<any> | undefined, lastValue?: any | undefined, trans?: any | undefined) => any, adaptAsync?: boolean): FuncInstance | Function;
+    after(cb: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, lastValue?: any | undefined, trans?: any | undefined) => any, adaptAsync?: boolean): FuncInstance | Function;
     /**
      * @param before{beforeCallback}
      * @param after{afterCallback}
@@ -51,7 +57,7 @@ export class FuncInstance extends Function {
      * @param adaptAsync{boolean}
      * @return {FuncInstance|Function}
      */
-    surround({ before, after, onError, adaptAsync }: (origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any): FuncInstance | Function;
+    surround({ before, after, onError, adaptAsync }: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any): FuncInstance | Function;
     /**
      * @param cb{resolveCallback=}
      * @return {FuncInstance|Function}
