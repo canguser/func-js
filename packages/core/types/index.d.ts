@@ -38,7 +38,7 @@ export class FuncInstance extends Function {
 }
 
 interface FuncOptions {
-    instanceType?: FuncInstance
+    instanceType?: Function
 }
 
 export function give<T extends Function, F extends FuncInstance>(func?: T | undefined, options?: FuncOptions): F | Function;
