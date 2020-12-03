@@ -2,16 +2,59 @@ import {assignInstance, assignProperty, genID} from "@func-js/utils";
 
 export class FuncInstance extends Function {
 
+    /**
+     * @callback resolveCallback
+     * @param res{*=}
+     */
+
+    /**
+     * @callback beforeCallback
+     * @param origin{Function=}
+     * @param args{Array<*>=}
+     * @param preventDefault{Function=}
+     * @param trans{Object=}
+     */
+
+    /**
+     * @callback afterCallback
+     * @param origin{Function=}
+     * @param args{Array<*>=}
+     * @param lastValue{*=}
+     * @param trans{Object=}
+     */
+
+    /**
+     * @callback errorCallback
+     * @param origin{Function=}
+     * @param args{Array<*>=}
+     * @param error{*=}
+     * @param resolve{resolveCallback=}
+     * @param trans{Object=}
+     */
+
+    /**
+     * @private
+     * @param target{FuncInstance}
+     */
     initAssign(target) {
         this.id = genID(7);
         // all func from FuncInstance has the uniqueId
         assignProperty(this, target, 'uniqueId', () => genID(7));
     }
 
+    /**
+     * @param context {Object}
+     * @return {FuncInstance | Function}
+     */
     bind(context) {
         return assignInstance(super.bind(context), this);
     }
 
+    /**
+     * @param cb{beforeCallback}
+     * @param adaptAsync{boolean}
+     * @return {FuncInstance|Function}
+     */
     before(cb, adaptAsync = false) {
         return this.surround(
             {
@@ -21,6 +64,11 @@ export class FuncInstance extends Function {
         )
     }
 
+    /**
+     * @param cb{afterCallback}
+     * @param adaptAsync{boolean}
+     * @return {FuncInstance|Function}
+     */
     after(cb, adaptAsync = false) {
         return this.surround(
             {
@@ -30,6 +78,13 @@ export class FuncInstance extends Function {
         )
     }
 
+    /**
+     * @param before{beforeCallback}
+     * @param after{afterCallback}
+     * @param onError{errorCallback}
+     * @param adaptAsync{boolean}
+     * @return {FuncInstance|Function}
+     */
     surround(
         {
             before = undefined,
@@ -125,6 +180,10 @@ export class FuncInstance extends Function {
         )
     }
 
+    /**
+     * @param cb{resolveCallback=}
+     * @return {FuncInstance|Function}
+     */
     then(cb) {
         const _this = this;
         return assignInstance(
@@ -135,6 +194,10 @@ export class FuncInstance extends Function {
         );
     }
 
+    /**
+     * @param cb{resolveCallback=}
+     * @return {FuncInstance|Function}
+     */
     catch(cb) {
         const _this = this;
         return assignInstance(
@@ -153,6 +216,10 @@ export class FuncInstance extends Function {
         )
     }
 
+    /**
+     * @param cb{resolveCallback=}
+     * @return {FuncInstance|Function}
+     */
     finally(cb) {
         const _this = this;
         return assignInstance(

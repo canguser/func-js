@@ -5,6 +5,12 @@ const defaultOptions = {
     instanceType: FuncInstance
 };
 
+/**
+ * @param func {Function}
+ * @param options {Object=}
+ * @param options.instanceType {Function=}
+ * @return {FuncInstance | Function}
+ */
 export function give(func, options) {
     options = {...defaultOptions, ...options};
     const resultFunc = function (...args) {

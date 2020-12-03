@@ -21,9 +21,9 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@func-js/utils": "^0.0.5",
-    "@func-js/core": "^0.0.5",
-    "@func-js/async": "^0.0.5"
+    "@func-js/utils": "^0.0.7",
+    "@func-js/core": "^0.0.7",
+    "@func-js/async": "^0.0.7"
   },
   "devDependencies": {
     "webpack": "^5.7.0",

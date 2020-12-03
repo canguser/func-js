@@ -860,26 +860,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@func-js/async@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@func-js/async/-/async-0.0.5.tgz#3c51ab4824076e7fde50cc5de563f0905e9b33f2"
-  integrity sha512-oYKxbGJC0jThZFDLAfbqdX+DVFVUlnMKDX8F0n3Rbodv/dnqukItydZcq+tjEclHG54nLL6a1MWecD+Ysk0QIg==
-  dependencies:
-    "@func-js/core" "^0.0.5"
-    "@func-js/utils" "^0.0.5"
-
-"@func-js/core@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@func-js/core/-/core-0.0.5.tgz#d20f12ca310caeb635b2f109855d8405ce67e114"
-  integrity sha512-NAKdgzQR9PfFyuzAxlXXx1JWIuXBqCegHQ35b/jmgfNrjOiqdLxa37AeBlsRSlYDfSkH2CYAIZjTn0EgC8j+3w==
-  dependencies:
-    "@func-js/utils" "^0.0.5"
-
-"@func-js/utils@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@func-js/utils/-/utils-0.0.5.tgz#deddc37b89b3099d602e0d71a9470bfef2d4f513"
-  integrity sha512-cf1ip4xaVg8MzoWhjo1Bf0n+NIfDZh43KenqusvT5faZV/HIAEombIuya5LAKXJ0iTWSywNNTm/YzILYLn42Jg==
-
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -4698,6 +4678,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.2.tgz#6369ef22516fe5e10304aae5a5c4862db55380e9"
+  integrity sha512-thGloWsGH3SOxv1SoY7QojKi0tc+8FnOmiarEGMbd/lar7QOEd3hvlx3Fp5y6FlDUGl9L+pd4n2e+oToGMmhRQ==
 
 typical@^5.0.0, typical@^5.2.0:
   version "5.2.0"
