@@ -1,6 +1,6 @@
 {
   "name": "@func-js/core",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "the core package of func-js",
   "main": "dist/func.core.js",
   "mainMini": "dist/func.core.mini.js",
@@ -20,7 +20,8 @@
     "rollup:esm": "cross-env NODE_ENV=esm rollup -c",
     "rollup:esm:es5": "cross-env NODE_ENV=esm5 rollup -c",
     "gen-dts": "npx typescript main/index.js --declaration --allowJs --emitDeclarationOnly --outDir types",
-    "gen-doc": "jsdoc2md \"main/**/*.js\" > docs/readme.md"
+    "gen-docs": "jsdoc2md \"main/**/*.js\" > docs/readme.md",
+    "gen-dts:docs": "yarn run gen-dts && yarn run gen-docs"
   },
   "files": [
     "dist",

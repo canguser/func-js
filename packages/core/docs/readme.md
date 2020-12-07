@@ -24,9 +24,11 @@
 <dd><p>Callback when using before method</p>
 </dd>
 <dt><a href="#afterCallback">afterCallback</a> : <code>function</code></dt>
-<dd></dd>
+<dd><p>Callback when using after method</p>
+</dd>
 <dt><a href="#errorCallback">errorCallback</a> : <code>function</code></dt>
-<dd></dd>
+<dd><p>Callback when using error method</p>
+</dd>
 </dl>
 
 <a name="FuncInstance"></a>
@@ -172,7 +174,7 @@ Callback when using before method
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [params] | <code>Object</code> |  |
+| [params] | <code>Object</code> | Params for before callback |
 | [params.origin] | <code>function</code> | The origin method of the AOP method |
 | [params.args] | <code>Array.&lt;\*&gt;</code> | The args of the AOP method |
 | [params.preventDefault] | <code>function</code> | The method if called will prevent method executing,                                          and using this callback return value instead of APO method return value |
@@ -181,27 +183,31 @@ Callback when using before method
 <a name="afterCallback"></a>
 
 ## afterCallback : <code>function</code>
+Callback when using after method
+
 **Kind**: global typedef  
 
-| Param | Type |
-| --- | --- |
-| [params] | <code>Object</code> | 
-| [params.origin] | <code>function</code> | 
-| [params.args] | <code>Array.&lt;\*&gt;</code> | 
-| [params.lastValue] | <code>\*</code> | 
-| [params.trans] | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| [params] | <code>Object</code> | Params for after callback |
+| [params.origin] | <code>function</code> | The origin method of the AOP method |
+| [params.args] | <code>Array.&lt;\*&gt;</code> | The args of the AOP method |
+| [params.lastValue] | <code>\*</code> | The value returned from AOP method by default |
+| [params.trans] | <code>Object</code> | The temp storage place from the APO method,                                  you can get the property from before method, or set the property |
 
 <a name="errorCallback"></a>
 
 ## errorCallback : <code>function</code>
+Callback when using error method
+
 **Kind**: global typedef  
 
-| Param | Type |
-| --- | --- |
-| [params] | <code>Object</code> | 
-| [params.origin] | <code>function</code> | 
-| [params.args] | <code>Array.&lt;\*&gt;</code> | 
-| [params.error] | <code>\*</code> | 
-| [params.resolve] | [<code>resolveCallback</code>](#resolveCallback) | 
-| [params.trans] | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| [params] | <code>Object</code> | Params for error callback |
+| [params.origin] | <code>function</code> | The origin method of the AOP method |
+| [params.args] | <code>Array.&lt;\*&gt;</code> | The args of the AOP method |
+| [params.error] | <code>\*</code> | The error object | error message |
+| [params.resolve] | [<code>resolveCallback</code>](#resolveCallback) | When this method called the AOP method will use the params as return value |
+| [params.trans] | <code>Object</code> | The temp storage place from the APO method,                                          you can get the property from before or after method |
 

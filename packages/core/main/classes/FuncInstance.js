@@ -17,7 +17,7 @@ export class FuncInstance extends Function {
     /**
      * Callback when using before method
      * @callback beforeCallback
-     * @param params{Object=}
+     * @param params{Object=}                   Params for before callback
      * @param params.origin{Function=}          The origin method of the AOP method
      * @param params.args{Array<*>=}            The args of the AOP method
      * @param params.preventDefault{Function=}  The method if called will prevent method executing,
@@ -27,22 +27,26 @@ export class FuncInstance extends Function {
      */
 
     /**
+     * Callback when using after method
      * @callback afterCallback
-     * @param params{Object=}
-     * @param params.origin{Function=}
-     * @param params.args{Array<*>=}
-     * @param params.lastValue{*=}
-     * @param params.trans{Object=}
+     * @param params{Object=}           Params for after callback
+     * @param params.origin{Function=}  The origin method of the AOP method
+     * @param params.args{Array<*>=}    The args of the AOP method
+     * @param params.lastValue{*=}      The value returned from AOP method by default
+     * @param params.trans{Object=}     The temp storage place from the APO method,
+     *                                  you can get the property from before method, or set the property
      */
 
     /**
+     * Callback when using error method
      * @callback errorCallback
-     * @param params{Object=}
-     * @param params.origin{Function=}
-     * @param params.args{Array<*>=}
-     * @param params.error{*=}
-     * @param params.resolve{resolveCallback=}
-     * @param params.trans{Object=}
+     * @param params{Object=}                   Params for error callback
+     * @param params.origin{Function=}          The origin method of the AOP method
+     * @param params.args{Array<*>=}            The args of the AOP method
+     * @param params.error{*=}                  The error object | error message
+     * @param params.resolve{resolveCallback=}  When this method called the AOP method will use the params as return value
+     * @param params.trans{Object=}             The temp storage place from the APO method,
+     *                                          you can get the property from before or after method
      */
 
     /**
