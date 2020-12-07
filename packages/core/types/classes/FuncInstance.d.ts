@@ -1,19 +1,26 @@
 /**
- *
+ * @class The class included the function's extra methods
+ * @augments Function
+ * @property id {string}        the id only for this instance
+ * @property uniqueId {string}  the id for the chain of method called
  */
 export class FuncInstance extends Function {
     constructor(...args: string[]);
     /**
+     * Just a callback with the resolve params
      * @callback resolveCallback
-     * @param res{*=}
+     * @param res{*=}   the callback param
      */
     /**
+     * Callback when using before method
      * @callback beforeCallback
      * @param params{Object=}
-     * @param params.origin{Function=}
-     * @param params.args{Array<*>=}
-     * @param params.preventDefault{Function=}
-     * @param params.trans{Object=}
+     * @param params.origin{Function=}          The origin method of the AOP method
+     * @param params.args{Array<*>=}            The args of the AOP method
+     * @param params.preventDefault{Function=}  The method if called will prevent method executing,
+     *                                          and using this callback return value instead of APO method return value
+     * @param params.trans{Object=}             The temp storage place from the APO method, you can set the property in the before method
+     * @return {*}                              If preventDefault event called, the return value will be the AOP method's return value
      */
     /**
      * @callback afterCallback
@@ -39,36 +46,50 @@ export class FuncInstance extends Function {
     private initAssign;
     id: string;
     /**
-     * @param cb{beforeCallback}
-     * @param adaptAsync{boolean}
+     * Making something called before the AOP method
+     * @param cb{beforeCallback}    The callback called before the AOP method calling
+     * @param adaptAsync{boolean=}  If equals true & callback returned a Promise result,
+     *                              the AOP method will called after the Promise finished.
      * @return {FuncInstance|Function}
      */
-    before(cb: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any, adaptAsync?: boolean): FuncInstance | Function;
+    before(cb: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any, adaptAsync?: boolean | undefined): FuncInstance | Function;
     /**
-     * @param cb{afterCallback}
-     * @param adaptAsync{boolean}
+     * Making something called after the AOP method
+     * @param cb{afterCallback}     The callback called after the AOP method calling
+     * @param adaptAsync{boolean=}  If equals true & AOP method returned a Promise result,
+     *                              the after method will called after the Promise finished.
      * @return {FuncInstance|Function}
      */
-    after(cb: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, lastValue?: any | undefined, trans?: any | undefined) => any, adaptAsync?: boolean): FuncInstance | Function;
+    after(cb: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, lastValue?: any | undefined, trans?: any | undefined) => any, adaptAsync?: boolean | undefined): FuncInstance | Function;
     /**
-     * @param before{beforeCallback}
-     * @param after{afterCallback}
-     * @param onError{errorCallback}
-     * @param adaptAsync{boolean}
+     * Making something called surround the APO method
+     * @param options{Object} options for surround method
+     * @param options.before{beforeCallback=}   The callback called before the AOP method calling
+     * @param options.after{afterCallback=}     The callback called after the AOP method calling
+     * @param options.onError{errorCallback=}   The callback called while an error happening from the AOP method calling
+     * @param options.adaptAsync{boolean=}      If equals TRUE, all surround methods will waiting the last Promise result
      * @return {FuncInstance|Function}
      */
-    surround({ before, after, onError, adaptAsync }: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any): FuncInstance | Function;
+    surround({ before, after, onError, adaptAsync }: {
+        before?: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, preventDefault?: Function | undefined, trans?: any | undefined) => any;
+        after?: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, lastValue?: any | undefined, trans?: any | undefined) => any;
+        onError?: (params?: any | undefined, origin?: Function | undefined, args?: Array<any> | undefined, error?: any | undefined, resolve?: (res?: any | undefined) => any, trans?: any | undefined) => any;
+        adaptAsync?: boolean | undefined;
+    }): FuncInstance | Function;
     /**
+     * Making an async method call then method
      * @param cb{resolveCallback=}
      * @return {FuncInstance|Function}
      */
     then(cb?: (res?: any | undefined) => any): FuncInstance | Function;
     /**
+     * Making an async method call catch method
      * @param cb{resolveCallback=}
      * @return {FuncInstance|Function}
      */
     catch(cb?: (res?: any | undefined) => any): FuncInstance | Function;
     /**
+     * Making an async method call finally method
      * @param cb{resolveCallback=}
      * @return {FuncInstance|Function}
      */
