@@ -3,6 +3,15 @@ import {AsyncManager} from "./AsyncManager";
 import {METHOD_END, METHOD_START} from "../constants/EventConstants";
 import {assignProperty, generateStrategyMapper, genID, getHashCode} from "@func-js/utils";
 
+/**
+ * Enum for cache-type values.
+ * @readonly
+ * @enum {Symbol|string}
+ * @property LOCAL_STORAGE
+ * @property SESSION_STORAGE
+ * @property MEMORY
+ * @property CUSTOM
+ */
 export const CacheType = {
     LOCAL_STORAGE: Symbol('LOCAL_STORAGE'),
     SESSION_STORAGE: Symbol('SESSION_STORAGE'),
@@ -13,13 +22,27 @@ export const CacheType = {
 const globalMemoryStorage = {};
 const globalExistedSignMapper = {};
 
+/**
+ * @class
+ * @augments FuncInstance
+ * @property asyncManager {AsyncManager} The asyncManger instance bind to this instance
+ */
 export class AsyncFuncInstance extends FuncInstance {
 
+    /**
+     * @private
+     * @param target{FuncInstance}
+     */
     initAssign(target) {
         super.initAssign(target);
         assignProperty(this, target, 'asyncManager', () => undefined);
     }
 
+    /**
+     * Set the manager instance, it's helpful to using the methods without `asyncManager` param
+     * @param manager {AsyncManager}    The async manager instance
+     * @return {AsyncFuncInstance}      This function instance
+     */
     setManager(manager) {
         if (manager && manager instanceof AsyncManager) {
             this.asyncManager = manager;
@@ -27,6 +50,16 @@ export class AsyncFuncInstance extends FuncInstance {
         return this;
     }
 
+    /**
+     * Sign the async method with identity,
+     * to prevent the earlier results override the latest results in to async methods
+     * @param local{string}                         This string is using to mark where the method called,
+     *                                              two async methods with the same local will leads only one results
+     * @param options{Object=}                      The options for sign method
+     * @param options.identity{Function=}           A method to generate identity string while calling, default using `utils.genID` method
+     * @param options.asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     * @return {FuncInstance | Function}            This function instance
+     */
     sign(local = '', {identity = genID, asyncManager} = {}) {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
 
@@ -72,6 +105,16 @@ export class AsyncFuncInstance extends FuncInstance {
         );
     }
 
+    /**
+     * This method can hook target method's start, end callback, and registered to async manager.
+     * While result method called, `METHOD_START`, `PROCESS_START` and more event could be called in its async manager instance
+     * @param options{Object=}              The options for process method
+     * @param options.start{Function=}      Before the target method called, the start method will be called without any params
+     * @param options.end{Function=}        After the target method called, the start method will be called without any params
+     * @param options.context{Function=}    The context for above methods
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     * @return {FuncInstance | Function}    This function instance
+     */
     process(
         {
             start = undefined,
@@ -101,6 +144,19 @@ export class AsyncFuncInstance extends FuncInstance {
         });
     }
 
+    /**
+     * Using this method to cache async function's return value
+     * @param options{Object=}              The options for cache method
+     * @param options.type{CacheType=}      Specified the cache type to using with cache
+     *                                      @see {@link CacheType}
+     *                                      @see {@link MEMORY}
+     * @param options.setter{Function=}     If cache type set custom, this method will be called to set cache
+     * @param options.getter{Function=}     If cache type set custom, this method will be called to get cache
+     * @param options.keyPrefix{string=}    The cache key's prefix
+     * @param options.expire{number=}       Specified the expiration(ms) for the cache, default to be 5min
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     * @return {FuncInstance | Function}    This function instance
+     */
     cache(
         {
             type = CacheType.MEMORY,
@@ -184,6 +240,4 @@ export class AsyncFuncInstance extends FuncInstance {
             adaptAsync: true
         });
     }
-
-
 }

@@ -1,6 +1,6 @@
 {
   "name": "@func-js/async",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "the async package of func-js",
   "main": "dist/func.async.js",
   "mainMini": "dist/func.async.mini.js",
@@ -18,10 +18,14 @@
     "rollup": "rollup -c",
     "rollup:mini": "cross-env NODE_ENV=prod rollup -c",
     "rollup:esm": "cross-env NODE_ENV=esm rollup -c",
-    "rollup:esm:es5": "cross-env NODE_ENV=esm5 rollup -c"
+    "rollup:esm:es5": "cross-env NODE_ENV=esm5 rollup -c",
+    "gen-dts": "npx typescript main/index.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "gen-docs": "jsdoc2md \"main/**/*.js\" > docs/readme.md",
+    "gen-dts:docs": "yarn run gen-dts && yarn run gen-docs"
   },
   "files": [
     "dist",
+    "docs",
     "types",
     "readme.md",
     "LICENSE",
@@ -29,8 +33,8 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@func-js/core": "^0.0.7",
-    "@func-js/utils": "^0.0.7"
+    "@func-js/core": "^0.1.0",
+    "@func-js/utils": "^0.1.0"
   },
   "devDependencies": {
     "webpack": "^5.7.0",
@@ -45,6 +49,8 @@
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^7.0.2",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "typescript": "^4.1.2",
+    "jsdoc-to-markdown": "^6.0.1"
   }
 }
