@@ -35,46 +35,19 @@ export const eventOptions = {
 };
 
 /**
- * This method only called while AsyncFuncInstance initialized,
- * and register process event | emit it
- * @private
- */
-function initialProcess() {
-    const {
-        processIdentity = managerDefaultOptions.processIdentity
-    } = this.options;
-
-    let inProcesses = 0;
-
-    this.on(METHOD_START, () => {
-        if (inProcesses === 0) {
-            this.emit(PROCESS_START, {identity: processIdentity});
-        }
-        inProcesses++;
-    });
-
-    this.on(METHOD_END, () => {
-        inProcesses--;
-        if (inProcesses <= 0) {
-            inProcesses = 0;
-            this.emit(PROCESS_END, {identity: processIdentity});
-        }
-    });
-}
-
-/**
  * This class used to initialize {@link AsyncFuncInstance},
  * register and listen event for async methods,
  * manager caches and more storage info
  * @class
- * @property options{Object}
- * @property memoryStorage{Object}
- * @property eventsMapper{Object}
- * @property signMapper{Object}
+ * @property options{Object}        Options of {@link AsyncManager}
+ * @property memoryStorage{Object}  Used to store cache in memories
+ * @property eventsMapper{Object}   Used to store events' mapper
+ * @property signMapper{Object}     Used to store the sign identity mapper
  */
 export class AsyncManager {
 
     /**
+     * @constructs AsyncManager
      * @param options{Object=} options to initialize manager
      */
     constructor(options) {
@@ -230,5 +203,32 @@ export class AsyncManager {
         }
         return this.preCacheStorage[instanceId];
     }
+}
 
+/**
+ * This method only called while AsyncFuncInstance initialized,
+ * and register process event | emit it
+ * @private
+ */
+function initialProcess() {
+    const {
+        processIdentity = managerDefaultOptions.processIdentity
+    } = this.options;
+
+    let inProcesses = 0;
+
+    this.on(METHOD_START, () => {
+        if (inProcesses === 0) {
+            this.emit(PROCESS_START, {identity: processIdentity});
+        }
+        inProcesses++;
+    });
+
+    this.on(METHOD_END, () => {
+        inProcesses--;
+        if (inProcesses <= 0) {
+            inProcesses = 0;
+            this.emit(PROCESS_END, {identity: processIdentity});
+        }
+    });
 }

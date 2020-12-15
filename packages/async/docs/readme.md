@@ -152,6 +152,137 @@ Get the method to catch the pre loaded cache
 | --- | --- | --- |
 | [asyncManager] | [<code>AsyncManager</code>](#AsyncManager) | Specified the async manager instance, default to using the params of `setManager` called |
 
+<a name="AsyncManager"></a>
+
+## AsyncManager
+This class used to initialize [AsyncFuncInstance](#AsyncFuncInstance),
+register and listen event for async methods,
+manager caches and more storage info
+
+**Kind**: global class  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| options | <code>Object</code> | Options of [AsyncManager](#AsyncManager) |
+| memoryStorage | <code>Object</code> | Used to store cache in memories |
+| eventsMapper | <code>Object</code> | Used to store events' mapper |
+| signMapper | <code>Object</code> | Used to store the sign identity mapper |
+
+
+* [AsyncManager](#AsyncManager)
+    * [new exports.AsyncManager([options])](#new_AsyncManager_new)
+    * _instance_
+        * [.emit(eventName, [options])](#AsyncManager+emit)
+        * [.on(eventName, callback, [options])](#AsyncManager+on) ⇒ <code>string</code>
+        * [.off(eventIdentity)](#AsyncManager+off)
+        * [.getMemoryStorage()](#AsyncManager+getMemoryStorage) ⇒ <code>Object</code>
+        * [.getExistedSignMapper()](#AsyncManager+getExistedSignMapper) ⇒ <code>Object</code>
+        * [.use(func, [options])](#AsyncManager+use) ⇒ [<code>AsyncFuncInstance</code>](#AsyncFuncInstance) \| <code>function</code>
+        * [.getPreCacheStorage(instanceId)](#AsyncManager+getPreCacheStorage) ⇒ <code>Object</code>
+    * _static_
+        * [.use(func, [options])](#AsyncManager.use) ⇒ [<code>AsyncFuncInstance</code>](#AsyncFuncInstance) \| <code>function</code>
+
+<a name="new_AsyncManager_new"></a>
+
+### new exports.AsyncManager([options])
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>Object</code> | options to initialize manager |
+
+<a name="AsyncManager+emit"></a>
+
+### asyncManager.emit(eventName, [options])
+Emit event
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| eventName | <code>string</code> | The event name to emit |
+| [options] | <code>Object</code> | Options for emit method |
+| [options.identity] | <code>Object</code> | Something to identity the event, only when event name with the same identity emit,                                  the event callback will be fired |
+| [options.params] | <code>Object</code> | Specified the params pass to event, ordering to send with event callback |
+
+<a name="AsyncManager+on"></a>
+
+### asyncManager.on(eventName, callback, [options]) ⇒ <code>string</code>
+Register event handler
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+**Returns**: <code>string</code> - The event identity, you can using off method to cancel this event listener  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| eventName | <code>string</code> | Event name for this handler callback |
+| callback | <code>function</code> | While event emitting, this callback will be called |
+| [options] | <code>Object</code> | Options for on method |
+| [options.identity] | <code>Object</code> | Something to identity the event, only when event name with the same identity emit,                                  the event callback will be fired |
+| [options.params] | <code>Object</code> | Specified the params pass to event, ordering to send with event callback |
+| [options.isOnce] | <code>Boolean</code> | If set true, the callback will only triggered once, default false |
+| [options.isAsync] | <code>Boolean</code> | If set true, the callback will exec async |
+
+<a name="AsyncManager+off"></a>
+
+### asyncManager.off(eventIdentity)
+Remove the event register
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| eventIdentity | <code>string</code> \| <code>Boolean</code> | The return value of on method to cancel listening, if set true, all event will be canceled. |
+
+<a name="AsyncManager+getMemoryStorage"></a>
+
+### asyncManager.getMemoryStorage() ⇒ <code>Object</code>
+Get storage cached in memory
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+<a name="AsyncManager+getExistedSignMapper"></a>
+
+### asyncManager.getExistedSignMapper() ⇒ <code>Object</code>
+Get signed mapper existed
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+<a name="AsyncManager+use"></a>
+
+### asyncManager.use(func, [options]) ⇒ [<code>AsyncFuncInstance</code>](#AsyncFuncInstance) \| <code>function</code>
+Initialize [AsyncFuncInstance](#AsyncFuncInstance) using options and using this [AsyncManager](#AsyncManager) instance
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+**Returns**: [<code>AsyncFuncInstance</code>](#AsyncFuncInstance) \| <code>function</code> - The [AsyncFuncInstance](#AsyncFuncInstance) instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>function</code> | Specified the target function to be [AsyncFuncInstance](#AsyncFuncInstance) instance |
+| [options] | <code>Object</code> | The options to initialize [AsyncFuncInstance](#AsyncFuncInstance) |
+
+<a name="AsyncManager+getPreCacheStorage"></a>
+
+### asyncManager.getPreCacheStorage(instanceId) ⇒ <code>Object</code>
+Get the pre cache of target instance
+
+**Kind**: instance method of [<code>AsyncManager</code>](#AsyncManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| instanceId | <code>string</code> | The id of target instance |
+
+<a name="AsyncManager.use"></a>
+
+### AsyncManager.use(func, [options]) ⇒ [<code>AsyncFuncInstance</code>](#AsyncFuncInstance) \| <code>function</code>
+Initialize [AsyncFuncInstance](#AsyncFuncInstance) using options and new [AsyncManager](#AsyncManager) instance
+
+**Kind**: static method of [<code>AsyncManager</code>](#AsyncManager)  
+**Returns**: [<code>AsyncFuncInstance</code>](#AsyncFuncInstance) \| <code>function</code> - The [AsyncFuncInstance](#AsyncFuncInstance) instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>function</code> | Specified the target function to be [AsyncFuncInstance](#AsyncFuncInstance) instance |
+| [options] | <code>Object</code> | The options to initialize [AsyncFuncInstance](#AsyncFuncInstance) |
+
 <a name="CacheType"></a>
 
 ## CacheType : <code>enum</code>
