@@ -73,5 +73,32 @@ describe(
                 ]
             )
         });
+
+        it('should [pre-cache] method works', function () {
+
+            expect.assertions(5);
+
+            let i = 0;
+            const fetchData = function () {
+                return wait(100).then(() => {
+                    expect(1).toBe(1);
+                    return i++;
+                });
+            };
+
+            const manager = new AsyncManager();
+
+            const func = manager.use(fetchData).preCache();
+
+            const result1 = func();
+            const result2 = result1.then(() => func.pre());
+            const result3 = result2.then(() => func());
+
+            return Promise.all([
+                expect(result1).resolves.toBe(0),
+                expect(result2).resolves.toBe(1),
+                expect(result3).resolves.toBe(1)
+            ]);
+        });
     }
 );

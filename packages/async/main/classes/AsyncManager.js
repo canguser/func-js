@@ -82,6 +82,7 @@ export class AsyncManager {
         this.memoryStorage = {};
         this.eventsMapper = {};
         this.signMapper = {};
+        this.preCacheStorage = {};
         initialProcess.call(this);
     }
 
@@ -223,6 +224,11 @@ export class AsyncManager {
      * @return {Object}
      */
     getPreCacheStorage(instanceId) {
-
+        const storage = this.preCacheStorage[instanceId];
+        if (!storage) {
+            this.preCacheStorage[instanceId] = {};
+        }
+        return this.preCacheStorage[instanceId];
     }
+
 }

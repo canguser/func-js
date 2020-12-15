@@ -257,8 +257,9 @@ export class AsyncFuncInstance extends FuncInstance {
             timeout = 360000 * 5, // default 5 min
             once = false,
             context
-        }
+        } = {}
     ) {
+        asyncManager = asyncManager ? asyncManager : this.asyncManager;
         const argsHashcode = getHashCode(args);
         const storage = asyncManager.getPreCacheStorage(this.uniqueId);
         const cachedInfo = storage[argsHashcode] || {};
@@ -268,7 +269,32 @@ export class AsyncFuncInstance extends FuncInstance {
                 cachedInfo.data = data;
                 cachedInfo.timeout = timeout;
                 cachedInfo.once = once;
+                storage[argsHashcode] = cachedInfo;
                 return data;
             });
+    }
+
+    /**
+     * Get the method to catch the pre loaded cache
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     * @return {FuncInstance | Function}    This function instance
+     */
+    preCache(
+        asyncManager
+    ) {
+        asyncManager = asyncManager ? asyncManager : this.asyncManager;
+        return this.before(({args = [], preventDefault}) => {
+            const argsHashcode = getHashCode(args);
+            const storage = asyncManager.getPreCacheStorage(this.uniqueId);
+            const cacheInfo = storage[argsHashcode];
+            const {data, timestamp, timeout, once} = cacheInfo || {};
+            if (cacheInfo && timestamp + timeout >= Date.now()) {
+                preventDefault();
+                if (once) {
+                    delete storage[argsHashcode];
+                }
+                return data;
+            }
+        });
     }
 }
