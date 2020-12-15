@@ -85,5 +85,11 @@ export class AsyncManager {
      * @return {AsyncFuncInstance|Function}    The {@link AsyncFuncInstance} instance
      */
     use(func: Function, options?: any | undefined): AsyncFuncInstance | Function;
+    /**
+     * Get the pre cache of target instance
+     * @param instanceId{string} The id of target instance
+     * @return {Object}
+     */
+    getPreCacheStorage(instanceId: string): any;
 }
 import { AsyncFuncInstance } from "./AsyncFuncInstance";

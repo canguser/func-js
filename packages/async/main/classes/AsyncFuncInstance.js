@@ -240,4 +240,35 @@ export class AsyncFuncInstance extends FuncInstance {
             adaptAsync: true
         });
     }
+
+    /**
+     * Pre called this method and cache it's returning results for next calling.
+     * @param args{Array<*>=}               The args as called params for method, and it will be identity for next calling.
+     * @param options{Object=}              The options for pre method
+     * @param options.timeout{number=}      Specified the timeout(ms) for this pre cache.
+     * @param options.once{boolean=}        If set true, this pre cache will be removed once read it.
+     * @param options.context{*=}           The context for target async method called.
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     */
+    pre(
+        args = [],
+        asyncManager,
+        {
+            timeout = 360000 * 5, // default 5 min
+            once = false,
+            context
+        }
+    ) {
+        const argsHashcode = getHashCode(args);
+        const storage = asyncManager.getPreCacheStorage(this.uniqueId);
+        const cachedInfo = storage[argsHashcode] || {};
+        return Promise.resolve(this.apply(context, args))
+            .then(data => {
+                cachedInfo.timestamp = Date.now();
+                cachedInfo.data = data;
+                cachedInfo.timeout = timeout;
+                cachedInfo.once = once;
+                return data;
+            });
+    }
 }

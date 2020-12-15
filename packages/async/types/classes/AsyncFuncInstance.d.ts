@@ -58,6 +58,16 @@ export class AsyncFuncInstance extends FuncInstance {
      * @return {FuncInstance | Function}    This function instance
      */
     cache({ type, setter, getter, keyPrefix, expire }?: any | undefined, asyncManager?: AsyncManager | undefined): FuncInstance | Function;
+    /**
+     * Pre called this method and cache it's returning results for next calling.
+     * @param args{Array<*>=}               The args as called params for method, and it will be identity for next calling.
+     * @param options{Object=}              The options for pre method
+     * @param options.timeout{number=}      Specified the timeout(ms) for this pre cache.
+     * @param options.once{boolean=}        If set true, this pre cache will be removed once read it.
+     * @param options.context{*=}           The context for target async method called.
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     */
+    pre(args?: Array<any> | undefined, asyncManager?: AsyncManager | undefined, { timeout, once, context }?: number | undefined): Promise<any>;
 }
 import { FuncInstance } from "@func-js/core/types/classes/FuncInstance";
 import { AsyncManager } from "./AsyncManager";

@@ -53,6 +53,7 @@ manager caches and more storage info</p>
     * [.sign(local, [options])](#AsyncFuncInstance+sign) ⇒ <code>FuncInstance</code> \| <code>function</code>
     * [.process([options], [asyncManager])](#AsyncFuncInstance+process) ⇒ <code>FuncInstance</code> \| <code>function</code>
     * [.cache([options], [asyncManager])](#AsyncFuncInstance+cache) ⇒ <code>FuncInstance</code> \| <code>function</code>
+    * [.pre([args], [options], [asyncManager])](#AsyncFuncInstance+pre)
 
 <a name="AsyncFuncInstance+setManager"></a>
 
@@ -120,6 +121,22 @@ Using this method to cache async function's return value
 | [options.getter] | <code>function</code> | If cache type set custom, this method will be called to get cache |
 | [options.keyPrefix] | <code>string</code> | The cache key's prefix |
 | [options.expire] | <code>number</code> | Specified the expiration(ms) for the cache, default to be 5min |
+| [asyncManager] | [<code>AsyncManager</code>](#AsyncManager) | Specified the async manager instance, default to using the params of `setManager` called |
+
+<a name="AsyncFuncInstance+pre"></a>
+
+### asyncFuncInstance.pre([args], [options], [asyncManager])
+Pre called this method and cache it's returning results for next calling.
+
+**Kind**: instance method of [<code>AsyncFuncInstance</code>](#AsyncFuncInstance)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [args] | <code>Array.&lt;\*&gt;</code> | The args as called params for method, and it will be identity for next calling. |
+| [options] | <code>Object</code> | The options for pre method |
+| [options.timeout] | <code>number</code> | Specified the timeout(ms) for this pre cache. |
+| [options.once] | <code>boolean</code> | If set true, this pre cache will be removed once read it. |
+| [options.context] | <code>\*</code> | The context for target async method called. |
 | [asyncManager] | [<code>AsyncManager</code>](#AsyncManager) | Specified the async manager instance, default to using the params of `setManager` called |
 
 <a name="CacheType"></a>

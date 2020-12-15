@@ -215,4 +215,14 @@ export class AsyncManager {
             manager && manager instanceof AsyncManager ? manager : new options.managerType(...options.managerArgs)
         );
     };
+
+
+    /**
+     * Get the pre cache of target instance
+     * @param instanceId{string} The id of target instance
+     * @return {Object}
+     */
+    getPreCacheStorage(instanceId) {
+
+    }
 }
