@@ -1,5 +1,6 @@
-import {give} from "../index";
+import {define, give} from "../index";
 import {FuncInstance} from "../classes/FuncInstance";
+import {func} from "@func-js/test/main";
 
 function wait(ms, args) {
     return new Promise(((resolve) => {
@@ -150,6 +151,21 @@ describe('index.js', () => {
                 Promise.prototype.finally = finallyMethod;
             }
         )
+    });
+
+    it('should works for [define] method', function () {
+
+        const NoReturnFunc = define({
+            noReturn: function () {
+                return this.after(() => {
+                    return undefined;
+                })
+            }
+        });
+
+        const func = give(() => 100, {instanceType: NoReturnFunc}).noReturn();
+
+        expect(func()).toBeUndefined();
 
     });
 });

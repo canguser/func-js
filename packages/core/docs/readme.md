@@ -12,6 +12,9 @@
 <dt><a href="#give">give(func, [options])</a> ⇒ <code><a href="#FuncInstance">FuncInstance</a></code> | <code>function</code></dt>
 <dd><p>Making the function to be FuncInstance</p>
 </dd>
+<dt><a href="#define">define(methods, [options])</a> ⇒ <code>function</code></dt>
+<dd><p>Defined the custom methods for <a href="#FuncInstance">FuncInstance</a> and return the instance type with the custom methods.</p>
+</dd>
 </dl>
 
 ## Typedefs
@@ -152,6 +155,20 @@ Making the function to be FuncInstance
 | func | <code>function</code> | the function to convert |
 | [options] | <code>Object</code> | the options for this giving |
 | [options.instanceType] | <code>function</code> | the class type of instance default to be FuncInstance |
+
+<a name="define"></a>
+
+## define(methods, [options]) ⇒ <code>function</code>
+Defined the custom methods for [FuncInstance](#FuncInstance) and return the instance type with the custom methods.
+
+**Kind**: global function  
+**Returns**: <code>function</code> - The result instance type could be used.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| methods | <code>Object</code> | The methods mapper for custom methods. |
+| [options] | <code>Object</code> | The options for define method. |
+| [options.extends] | <code>function</code> | The instance type extends from [FuncInstance](#FuncInstance), the origin methods can be kept. |
 
 <a name="resolveCallback"></a>
 

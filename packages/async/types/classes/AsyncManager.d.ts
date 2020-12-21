@@ -20,10 +20,10 @@ export const eventOptions: {
  * register and listen event for async methods,
  * manager caches and more storage info
  * @class
- * @property options{Object}
- * @property memoryStorage{Object}
- * @property eventsMapper{Object}
- * @property signMapper{Object}
+ * @property options{Object}        Options of {@link AsyncManager}
+ * @property memoryStorage{Object}  Used to store cache in memories
+ * @property eventsMapper{Object}   Used to store events' mapper
+ * @property signMapper{Object}     Used to store the sign identity mapper
  */
 export class AsyncManager {
     /**
@@ -34,6 +34,7 @@ export class AsyncManager {
      */
     static use(func: Function, options?: any | undefined): AsyncFuncInstance | Function;
     /**
+     * @constructs AsyncManager
      * @param options{Object=} options to initialize manager
      */
     constructor(options?: any | undefined);

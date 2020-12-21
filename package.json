@@ -2,13 +2,14 @@
   "workspaces": [
     "packages/*"
   ],
-  "version": "0.0.1",
+  "version": "0.1.1",
   "author": "Cangshi",
   "license": "MIT",
   "private": true,
   "scripts": {
     "do-all-publish": "yarn workspaces run run-publish",
     "build": "yarn workspace @func-js/utils run build && yarn workspace @func-js/core run build && yarn workspace @func-js/async run build",
+    "gen-dts:docs": "yarn workspaces run gen-dts:docs",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

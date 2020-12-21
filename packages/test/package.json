@@ -10,7 +10,8 @@
   "scripts": {
     "build": "echo 'egnore test'",
     "do-publish": "echo 'egnore test'",
-    "run-publish": "echo 'egnore test'"
+    "run-publish": "echo 'egnore test'",
+    "gen-dts:docs": "echo 'egnore test'"
   },
   "files": [
     "dist",
