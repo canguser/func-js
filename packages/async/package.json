@@ -1,6 +1,6 @@
 {
   "name": "@func-js/async",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "the async package of func-js",
   "main": "dist/func.async.js",
   "mainMini": "dist/func.async.mini.js",
