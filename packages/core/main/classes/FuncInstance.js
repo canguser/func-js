@@ -129,7 +129,7 @@ export class FuncInstance extends Function {
             function (...args) {
                 const trans = {};
                 const baseParams = {
-                    origin, args, trans
+                    origin: lastOrigin, args, trans
                 };
                 const validErrorMethod = typeof onError === 'function';
                 try {

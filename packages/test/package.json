@@ -11,7 +11,8 @@
     "build": "echo 'egnore test'",
     "do-publish": "echo 'egnore test'",
     "run-publish": "echo 'egnore test'",
-    "gen-dts:docs": "echo 'egnore test'"
+    "gen-dts:docs": "echo 'egnore test'",
+    "run": "node main/index.js"
   },
   "files": [
     "dist",
@@ -22,9 +23,9 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@func-js/utils": "^0.0.7",
-    "@func-js/core": "^0.0.7",
-    "@func-js/async": "^0.0.7"
+    "@func-js/utils": "^0.1.2",
+    "@func-js/core": "^0.1.2",
+    "@func-js/async": "^0.1.2"
   },
   "devDependencies": {
     "webpack": "^5.7.0",
