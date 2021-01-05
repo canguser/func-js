@@ -237,7 +237,7 @@ export class AsyncFuncInstance extends FuncInstance {
                 }
                 return returnValue;
             },
-            adaptAsync: true
+            adaptAsync: false
         });
     }
 

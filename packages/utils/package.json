@@ -1,6 +1,6 @@
 {
   "name": "@func-js/utils",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "Cangshi",
   "_sourceName": "func.utils",
   "main": "dist/func.utils.js",

@@ -1,6 +1,6 @@
 {
   "name": "@func-js/async",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "the async package of func-js",
   "main": "dist/func.async.js",
   "mainMini": "dist/func.async.mini.js",
@@ -33,8 +33,8 @@
   ],
   "types": "types/index.d.ts",
   "dependencies": {
-    "@func-js/core": "^0.1.3",
-    "@func-js/utils": "^0.1.3"
+    "@func-js/core": "^0.1.4",
+    "@func-js/utils": "^0.1.4"
   },
   "devDependencies": {
     "webpack": "^5.7.0",
