@@ -56,6 +56,7 @@ export class AsyncManager {
         this.eventsMapper = {};
         this.signMapper = {};
         this.preCacheStorage = {};
+        this.managedData = {};
         initialProcess.call(this);
     }
 

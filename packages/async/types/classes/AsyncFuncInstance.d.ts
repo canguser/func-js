@@ -74,6 +74,15 @@ export class AsyncFuncInstance extends FuncInstance {
      * @return {FuncInstance | Function}    This function instance
      */
     preCache(asyncManager?: AsyncManager | undefined): FuncInstance | Function;
+    /**
+     * If method execute asynchronously, multi methods with same params will execute many times.
+     * This method will prevent above, during the first method not finish,
+     * all method with the same params and using the method will not execute, and when the first method finished,
+     * the return value will be all waited methods' return value
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     * @return {FuncInstance | Function}    This function instance
+     */
+    multiplyMerge(asyncManager?: AsyncManager | undefined): FuncInstance | Function;
 }
 import { FuncInstance } from "@func-js/core/types/classes/FuncInstance";
 import { AsyncManager } from "./AsyncManager";

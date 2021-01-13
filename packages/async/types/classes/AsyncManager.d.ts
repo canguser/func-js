@@ -43,6 +43,7 @@ export class AsyncManager {
     eventsMapper: {};
     signMapper: {};
     preCacheStorage: {};
+    managedData: {};
     /**
      * Emit event
      * @param eventName{string}         The event name to emit

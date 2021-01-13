@@ -297,4 +297,70 @@ export class AsyncFuncInstance extends FuncInstance {
             }
         });
     }
+
+    /**
+     * If method execute asynchronously, multi methods with same params will execute many times.
+     * This method will prevent above, during the first method not finish,
+     * all method with the same params and using the method will not execute, and when the first method finished,
+     * the return value will be all waited methods' return value
+     * @param asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
+     * @return {FuncInstance | Function}    This function instance
+     */
+    multiplyMerge(asyncManager) {
+        asyncManager = asyncManager ? asyncManager : this.asyncManager;
+
+        const {multiplyMergeHeap = {}} = asyncManager.managedData;
+        asyncManager.managedData.multiplyMergeHeap = multiplyMergeHeap;
+
+        const _this = this;
+
+        return this.surround(
+            {
+                before({args, preventDefault, trans}) {
+                    const identity = _this.uniqueId + getHashCode(args);
+                    let targetHeap = multiplyMergeHeap[identity] || {callbacks: []};
+                    if (!targetHeap.isExecuting) {
+                        targetHeap = {
+                            isExecuting: true,
+                            callbacks: []
+                        };
+                        multiplyMergeHeap[identity] = targetHeap;
+                        trans.targetHeap = multiplyMergeHeap[identity];
+                    } else {
+                        preventDefault();
+                        return new Promise((resolve, reject) => {
+                            targetHeap.callbacks.push(({returnValue, isError, error}) => {
+                                if (!isError) {
+                                    resolve(returnValue);
+                                } else {
+                                    reject(error);
+                                }
+                            });
+                            multiplyMergeHeap[identity] = targetHeap;
+                            trans.targetHeap = multiplyMergeHeap[identity];
+                        })
+                    }
+                },
+                after({trans, lastValue}) {
+                    trans.targetHeap.isExecuting = false;
+                    trans.targetHeap.callbacks = trans.targetHeap.callbacks
+                        .filter(callback => {
+                            callback({returnValue: lastValue, isError: false});
+                            return false;
+                        });
+                    return lastValue;
+                },
+                onError({trans, error}) {
+                    trans.targetHeap.isExecuting = false;
+                    trans.targetHeap.callbacks = trans.targetHeap.callbacks
+                        .filter(callback => {
+                            callback({error, isError: true});
+                            return false;
+                        });
+                },
+                adaptAsync: true
+            }
+        );
+    }
+
 }

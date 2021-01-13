@@ -100,5 +100,45 @@ describe(
                 expect(result3).resolves.toBe(1)
             ]);
         });
+
+        it('should [multiplyMerge] method works', function () {
+
+            expect.assertions(9);
+
+            let i = 0;
+            const fetchData = function () {
+                return wait(100).then(() => {
+                    expect(1).toBe(1);
+                    if (i === 2) {
+                        throw new Error('i equals 2');
+                    }
+                    return i++;
+                });
+            };
+            const manager = new AsyncManager();
+            const func = manager.use(fetchData).multiplyMerge();
+            const result1 = func(); // +1
+            const result2 = func();
+            const result3 = func()
+                .then(() => func()); // +1
+            const result4 = func()
+                .then(() => func());
+            const result5 = func()
+                .then(() => func())
+                .then(() => func()); // +1
+            const result6 = func()
+                .then(() => func())
+                .then(() => func());
+
+            return Promise.all([
+                expect(result1).resolves.toBe(0),                   // +1
+                expect(result2).resolves.toBe(0),                   // +1
+                expect(result3).resolves.toBe(1),                   // +1
+                expect(result4).resolves.toBe(1),                   // +1
+                expect(result5).rejects.toThrow('i equals 2'),      // +1
+                expect(result6).rejects.toThrow('i equals 2')       // +1
+            ]);
+
+        });
     }
 );

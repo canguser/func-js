@@ -55,6 +55,7 @@ manager caches and more storage info</p>
     * [.cache([options], [asyncManager])](#AsyncFuncInstance+cache) ⇒ <code>FuncInstance</code> \| <code>function</code>
     * [.pre([args], [options], [asyncManager])](#AsyncFuncInstance+pre)
     * [.preCache([asyncManager])](#AsyncFuncInstance+preCache) ⇒ <code>FuncInstance</code> \| <code>function</code>
+    * [.multiplyMerge([asyncManager])](#AsyncFuncInstance+multiplyMerge) ⇒ <code>FuncInstance</code> \| <code>function</code>
 
 <a name="AsyncFuncInstance+setManager"></a>
 
@@ -144,6 +145,21 @@ Pre called this method and cache it's returning results for next calling.
 
 ### asyncFuncInstance.preCache([asyncManager]) ⇒ <code>FuncInstance</code> \| <code>function</code>
 Get the method to catch the pre loaded cache
+
+**Kind**: instance method of [<code>AsyncFuncInstance</code>](#AsyncFuncInstance)  
+**Returns**: <code>FuncInstance</code> \| <code>function</code> - This function instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [asyncManager] | [<code>AsyncManager</code>](#AsyncManager) | Specified the async manager instance, default to using the params of `setManager` called |
+
+<a name="AsyncFuncInstance+multiplyMerge"></a>
+
+### asyncFuncInstance.multiplyMerge([asyncManager]) ⇒ <code>FuncInstance</code> \| <code>function</code>
+If method execute asynchronously, multi methods with same params will execute many times.
+This method will prevent above, during the first method not finish,
+all method with the same params and using the method will not execute, and when the first method finished,
+the return value will be all waited methods' return value
 
 **Kind**: instance method of [<code>AsyncFuncInstance</code>](#AsyncFuncInstance)  
 **Returns**: <code>FuncInstance</code> \| <code>function</code> - This function instance  
