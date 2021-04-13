@@ -1,6 +1,5 @@
 import {define, give} from "../index";
 import {FuncInstance} from "../classes/FuncInstance";
-import {func} from "@func-js/test/main";
 
 function wait(ms, args) {
     return new Promise(((resolve) => {
@@ -166,6 +165,76 @@ describe('index.js', () => {
         const func = give(() => 100, {instanceType: NoReturnFunc}).noReturn();
 
         expect(func()).toBeUndefined();
+
+    });
+
+    it('should using register function', function () {
+
+        function modifiedReturn(v) {
+            return this.after(() => {
+                return v;
+            })
+        }
+
+        function addResult(v) {
+            expect(this.modifiedReturn).toBeTruthy();
+            expect(this.modifiedParams).toBeTruthy();
+            return this.after(({lastValue}) => {
+                return lastValue + v;
+            })
+        }
+
+        function modifiedParams(index, value) {
+            return this.before(({args}) => {
+                args[index] = value;
+            })
+        }
+
+        const func1 = give(r => r)
+            .register({modifiedReturn, modifiedParams});
+        expect(func1(1)).toBe(1);
+        expect(func1.modifiedReturn(15)(1)).toBe(15);
+        expect(func1.register({addResult}).addResult(15).modifiedParams(0, 2)(1)).toBe(17)
+
+        expect(FuncInstance.prototype.modifiedReturn).toBeFalsy();
+        expect(FuncInstance.prototype.addResult).toBeFalsy();
+        expect(FuncInstance.prototype.modifiedParams).toBeFalsy();
+
+
+    });
+
+    it('should using register class', function () {
+
+        const func1 = give(r => r)
+            .registerClass(instance => class extends instance {
+                modifiedParams(index, value) {
+                    return this.before(({args}) => {
+                        args[index] = value;
+                    })
+                }
+
+                modifiedReturn(v) {
+                    return this.after(() => {
+                        return v;
+                    })
+                }
+            });
+        expect(func1(1)).toBe(1);
+        expect(func1.modifiedReturn(15)(1)).toBe(15);
+        expect(func1.registerClass(instance => class extends instance {
+            addResult(v) {
+                expect(this.modifiedReturn).toBeTruthy();
+                expect(this.modifiedParams).toBeTruthy();
+                return this.after(({lastValue}) => {
+                    return lastValue + v;
+                })
+            }
+
+        }).addResult(15).modifiedParams(0, 2)(1)).toBe(17)
+
+        expect(FuncInstance.prototype.modifiedReturn).toBeFalsy();
+        expect(FuncInstance.prototype.addResult).toBeFalsy();
+        expect(FuncInstance.prototype.modifiedParams).toBeFalsy();
 
     });
 });

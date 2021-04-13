@@ -32,6 +32,9 @@
 <dt><a href="#errorCallback">errorCallback</a> : <code>function</code></dt>
 <dd><p>Callback when using error method</p>
 </dd>
+<dt><a href="#funcInstanceRegister">funcInstanceRegister</a> ⇒ <code><a href="#FuncInstance">FuncInstance</a></code> | <code>function</code></dt>
+<dd><p>Register for registerClass function</p>
+</dd>
 </dl>
 
 <a name="FuncInstance"></a>
@@ -57,6 +60,8 @@ The class included the function's extra methods
     * [.then([cb])](#FuncInstance+then) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.catch([cb])](#FuncInstance+catch) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.finally([cb])](#FuncInstance+finally) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+    * [.register(funcMap)](#FuncInstance+register) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+    * [.registerClass(register)](#FuncInstance+registerClass) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
 
 <a name="FuncInstance+bind"></a>
 
@@ -143,6 +148,28 @@ Making an async method call finally method
 | --- | --- |
 | [cb] | [<code>resolveCallback</code>](#resolveCallback) | 
 
+<a name="FuncInstance+register"></a>
+
+### funcInstance.register(funcMap) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+Making result method could using all of registered functions
+
+**Kind**: instance method of [<code>FuncInstance</code>](#FuncInstance)  
+
+| Param | Type |
+| --- | --- |
+| funcMap | <code>Object</code> | 
+
+<a name="FuncInstance+registerClass"></a>
+
+### funcInstance.registerClass(register) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+Making result method could using all of registered functions
+
+**Kind**: instance method of [<code>FuncInstance</code>](#FuncInstance)  
+
+| Param | Type |
+| --- | --- |
+| register | [<code>funcInstanceRegister</code>](#funcInstanceRegister) | 
+
 <a name="give"></a>
 
 ## give(func, [options]) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
@@ -227,4 +254,16 @@ Callback when using error method
 | [params.error] | <code>\*</code> | The error object | error message |
 | [params.resolve] | [<code>resolveCallback</code>](#resolveCallback) | When this method called the AOP method will use the params as return value |
 | [params.trans] | <code>Object</code> | The temp storage place from the APO method,                                          you can get the property from before or after method |
+
+<a name="funcInstanceRegister"></a>
+
+## funcInstanceRegister ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+Register for registerClass function
+
+**Kind**: global typedef  
+**Returns**: [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> - result func instance  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| instanceType | [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> | last one FuncInstance |
 

@@ -98,4 +98,22 @@ export class FuncInstance extends Function {
      * @return {FuncInstance|Function}
      */
     finally(cb?: (res?: any | undefined) => any): FuncInstance | Function;
+    /**
+     * Making result method could using all of registered functions
+     * @param funcMap {Object}
+     * @return {FuncInstance|Function}
+     */
+    register(funcMap?: any): FuncInstance | Function;
+    /**
+     * Register for registerClass function
+     * @callback funcInstanceRegister
+     * @param instanceType {FuncInstance|Function=} last one FuncInstance
+     * @return {FuncInstance|Function} result func instance
+     */
+    /**
+     * Making result method could using all of registered functions
+     * @param register{funcInstanceRegister}
+     * @return {FuncInstance|Function}
+     */
+    registerClass(register: (instanceType?: (FuncInstance | Function) | undefined) => FuncInstance | Function): FuncInstance | Function;
 }
