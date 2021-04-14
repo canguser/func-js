@@ -15,6 +15,9 @@
 <dt><a href="#define">define(methods, [options])</a> ⇒ <code>function</code></dt>
 <dd><p>Defined the custom methods for <a href="#FuncInstance">FuncInstance</a> and return the instance type with the custom methods.</p>
 </dd>
+<dt><a href="#mountGlobal">mountGlobal([options])</a></dt>
+<dd><p>Call this function to make <code>given</code> function mount Function&#39;s prototype</p>
+</dd>
 </dl>
 
 ## Typedefs
@@ -155,9 +158,9 @@ Making result method could using all of registered functions
 
 **Kind**: instance method of [<code>FuncInstance</code>](#FuncInstance)  
 
-| Param | Type |
-| --- | --- |
-| funcMap | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| funcMap | <code>Object</code> | An object with function property, those function will be used as callable method for FuncInstance |
 
 <a name="FuncInstance+registerClass"></a>
 
@@ -179,9 +182,9 @@ Making the function to be FuncInstance
 
 | Param | Type | Description |
 | --- | --- | --- |
-| func | <code>function</code> | the function to convert |
-| [options] | <code>Object</code> | the options for this giving |
-| [options.instanceType] | <code>function</code> | the class type of instance default to be FuncInstance |
+| func | <code>function</code> | The function to convert |
+| [options] | <code>Object</code> | The options for this giving |
+| [options.instanceType] | <code>function</code> | The class type of instance default to be FuncInstance |
 
 <a name="define"></a>
 
@@ -196,6 +199,19 @@ Defined the custom methods for [FuncInstance](#FuncInstance) and return the inst
 | methods | <code>Object</code> | The methods mapper for custom methods. |
 | [options] | <code>Object</code> | The options for define method. |
 | [options.extends] | <code>function</code> | The instance type extends from [FuncInstance](#FuncInstance), the origin methods can be kept. |
+
+<a name="mountGlobal"></a>
+
+## mountGlobal([options])
+Call this function to make `given` function mount Function's prototype
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [options] | <code>string</code> | Options for `mountGlobal` method |
+| [options.name] | <code>string</code> | The mount method's name |
+| [options.defaultOptions] | <code>Object</code> | Options same as `give` method |
 
 <a name="resolveCallback"></a>
 
@@ -261,9 +277,9 @@ Callback when using error method
 Register for registerClass function
 
 **Kind**: global typedef  
-**Returns**: [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> - result func instance  
+**Returns**: [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> - Result func instance, must extends params - `instanceType`  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| instanceType | [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> | last one FuncInstance |
+| instanceType | [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> | Latest one class extends @link{FuncInstance} |
 

@@ -1,6 +1,6 @@
 {
   "name": "@func-js/core",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "the core package of func-js",
   "main": "dist/func.core.js",
   "mainMini": "dist/func.core.mini.js",

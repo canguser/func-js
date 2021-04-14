@@ -11,9 +11,9 @@ const definedOptions = {
 
 /**
  * Making the function to be FuncInstance
- * @param func {Function} the function to convert
- * @param options {Object=} the options for this giving
- * @param options.instanceType {Function=}  the class type of instance default to be FuncInstance
+ * @param func {Function}                   The function to convert
+ * @param options {Object=}                 The options for this giving
+ * @param options.instanceType {Function=}  The class type of instance default to be FuncInstance
  * @return {FuncInstance | Function}
  */
 export function give(func, options) {
@@ -40,6 +40,19 @@ export function define(methods = {}, options) {
 
     Object.assign(DefinedFuncInstance.prototype, methods);
     return DefinedFuncInstance;
+}
+
+/**
+ * Call this function to make `given` function mount Function's prototype
+ * @param options {string=}                 Options for `mountGlobal` method
+ * @param options.name {string=}            The mount method's name
+ * @param options.defaultOptions {Object=}  Options same as `give` method
+ */
+export function mountGlobal(options) {
+    const {name = 'given', defaultOptions: dfOptions = defaultOptions} = options;
+    Function.prototype[name] = function (options) {
+        return give(this, {...dfOptions, ...options})
+    }
 }
 
 export * from "./classes/FuncInstance";

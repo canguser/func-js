@@ -1,4 +1,4 @@
-import {define, give} from "../index";
+import {define, give, mountGlobal} from "../index";
 import {FuncInstance} from "../classes/FuncInstance";
 
 function wait(ms, args) {
@@ -236,5 +236,35 @@ describe('index.js', () => {
         expect(FuncInstance.prototype.addResult).toBeFalsy();
         expect(FuncInstance.prototype.modifiedParams).toBeFalsy();
 
+    });
+    it('should mount global method', function () {
+        mountGlobal({name: 'fc'});
+        expect((() => undefined).fc).toBeTruthy();
+        const func = ((a, b) => a + b).fc().after(
+            ({lastValue}) => {
+                console.log(lastValue);
+                return lastValue + 1;
+            }
+        );
+        expect(func(3, 5)).toBe(9);
+        mountGlobal({
+            defaultOptions: {
+                instanceType: class extends FuncInstance {
+                    noReturn() {
+                        return this.after(() => undefined)
+                    }
+                }
+            }
+        });
+        const func1 = ((a, b) => a + b).given().noReturn();
+        expect(func1(3, 5)).toBe(undefined);
+        const func2 = ((a, b) => a + b).given({
+            instanceType: class extends FuncInstance {
+                twiceReturn() {
+                    return this.after(({lastValue}) => lastValue * 2);
+                }
+            }
+        }).twiceReturn();
+        expect(func2(3, 5)).toBe(16);
     });
 });
