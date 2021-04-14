@@ -68,8 +68,8 @@ describe('index.js', () => {
     });
 
     it('should work as normal - [bind] method', function () {
-        function callName() {
-            return this.name;
+        function callName(suffix) {
+            return this.name + suffix;
         }
 
         const newFunc = give(callName)
@@ -77,7 +77,7 @@ describe('index.js', () => {
                 name: 'nihao'
             });
 
-        expect(newFunc()).toBe('nihao');
+        expect(newFunc(' haha')).toBe('nihao haha');
         expect(newFunc).toBeInstanceOf(FuncInstance);
 
     });

@@ -67,7 +67,7 @@ export class FuncInstance extends Function {
      * @return {FuncInstance | Function}
      */
     bind(context, argArray = []) {
-        return assignInstance(super.bind(context, argArray), this);
+        return assignInstance(super.bind(context, ...argArray), this);
     }
 
     /**
@@ -316,13 +316,8 @@ export class FuncInstance extends Function {
      * @return {FuncInstance|Function}
      */
     registerClass(register) {
-        const _this = this;
         const instanceType = register(this.constructor);
-        const resultFunc = assignInstance(
-            function (...args) {
-                return _this.apply(this, args);
-            }, this
-        );
+        const resultFunc = this.bind(this);
         Object.setPrototypeOf(resultFunc, instanceType.prototype);
         if (typeof instanceType !== 'function' || !(resultFunc instanceof this.constructor)) {
             throw new Error('Registered class must extend FunctionInstance');
