@@ -1,6 +1,6 @@
 {
   "name": "@func-js/core",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "the core package of func-js",
   "main": "dist/func.core.js",
   "mainMini": "dist/func.core.mini.js",
@@ -38,6 +38,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "babel-loader": "^8.2.2",
