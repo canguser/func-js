@@ -2,10 +2,10 @@
 
 > The wonderful lib for function in `Javascript`
 
-## Packages *(Links are only valid in git web's repositories)*
-- [`@func-js/core`](./packages/core): The core js, includes the basic functions and usages.
-- [`@func-js/async`](./packages/async): The enhancement for core js, get to support multi features for async methods.
-- [`@func-js/utils`](./packages/utils): The utils for all packages.
+## Packages
+- [`@func-js/core`](https://github.com/canguser/func-js/tree/master/packages/core): The core js, includes the basic functions and usages.
+- [`@func-js/async`](https://github.com/canguser/func-js/tree/master/packages/async): The enhancement for core js, get to support multi features for async methods.
+- [`@func-js/utils`](https://github.com/canguser/func-js/tree/master/packages/utils): The utils for all packages.
 
 ## Demos
 
@@ -52,10 +52,10 @@
     console.log(signTimeInfo());        // > { id: '88888', name: 'Info #88888', singTime: 1609772675561 }
     ```
 
-## Documents *(Links are only valid in git web's repositories)*
-- `@func-js/core`: [Documentation](./packages/core/docs/readme.md)
-- `@func-js/async`: [Documentation](./packages/async/docs/readme.md)
-- `@func-js/utils`: [Documentation](./packages/utils/docs/readme.md)
+## Documents
+- `@func-js/core`: [Documentation](https://github.com/canguser/func-js/tree/master/packages/core/docs/readme.md)
+- `@func-js/async`: [Documentation](https://github.com/canguser/func-js/tree/master/packages/async/docs/readme.md)
+- `@func-js/utils`: [Documentation](https://github.com/canguser/func-js/tree/master/packages/utils/docs/readme.md)
 
 ## Need Contributors
 1. Fork the git repository, and download to local.
