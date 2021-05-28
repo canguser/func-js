@@ -65,6 +65,7 @@ The class included the function's extra methods
     * [.finally([cb])](#FuncInstance+finally) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.register(funcMap)](#FuncInstance+register) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.registerClass(register)](#FuncInstance+registerClass) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+    * [.pipe(method)](#FuncInstance+pipe) ⇒ <code>\*</code>
 
 <a name="FuncInstance+bind"></a>
 
@@ -172,6 +173,17 @@ Making result method could using all of registered functions
 | Param | Type |
 | --- | --- |
 | register | [<code>funcInstanceRegister</code>](#funcInstanceRegister) | 
+
+<a name="FuncInstance+pipe"></a>
+
+### funcInstance.pipe(method) ⇒ <code>\*</code>
+This method allow a method to make some operators for this function
+
+**Kind**: instance method of [<code>FuncInstance</code>](#FuncInstance)  
+
+| Param |
+| --- |
+| method | 
 
 <a name="give"></a>
 

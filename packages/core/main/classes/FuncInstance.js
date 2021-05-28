@@ -324,4 +324,13 @@ export class FuncInstance extends Function {
         }
         return resultFunc;
     }
+
+    /**
+     * This method allow a method to make some operators for this function
+     * @param method
+     * @return {*}
+     */
+    pipe(method) {
+        return method.call(this, this)
+    }
 }

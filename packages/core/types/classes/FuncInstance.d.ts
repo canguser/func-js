@@ -116,4 +116,10 @@ export class FuncInstance extends Function {
      * @return {FuncInstance|Function}
      */
     registerClass(register: (instanceType?: (FuncInstance | Function) | undefined) => any): FuncInstance | Function;
+    /**
+     * This method allow a method to make some operators for this function
+     * @param method
+     * @return {*}
+     */
+    pipe(method: any): any;
 }
