@@ -1,6 +1,6 @@
 {
   "name": "@func-js/core",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "the core package of func-js",
   "main": "dist/func.core.js",
   "mainMini": "dist/func.core.mini.js",
@@ -13,8 +13,8 @@
     "build-source": "webpack --progress --env production=false ",
     "build-mini": "webpack --env production=true --progress",
     "build": "yarn run rollup && yarn run rollup:mini && yarn run rollup:esm:es5",
-    "do-publish": "yarn run build && yarn publish --access public",
-    "run-publish": "yarn publish --access public",
+    "do-publish": "yarn run gen-dts:docs && yarn run build && yarn run run-publish",
+    "run-publish": "yarn publish --access public --tag latest --new-version $npm_package_version",
     "rollup": "rollup -c",
     "rollup:mini": "cross-env NODE_ENV=prod rollup -c",
     "rollup:esm": "cross-env NODE_ENV=esm rollup -c",

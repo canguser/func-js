@@ -326,11 +326,19 @@ export class FuncInstance extends Function {
     }
 
     /**
-     * This method allow a method to make some operators for this function
-     * @param method
-     * @return {*}
+     * This method allow one or more operators make some changes for this function
+     * @param operators{function=} operator list
+     * @return {FuncInstance|Function} Instance after changed
      */
-    pipe(method) {
-        return method.call(this, this)
+    pipe(...operators) {
+        return operators.reduce(
+            (resInstance, operator) => {
+                const returnInstance = operator.call(resInstance, resInstance);
+                if (!resInstance || !(resInstance instanceof FuncInstance)) {
+                    console.warn('@func-js:', '`pipe` method accept a operator without correct return value.');
+                    return resInstance;
+                }
+                return returnInstance;
+            }, this)
     }
 }

@@ -65,7 +65,7 @@ The class included the function's extra methods
     * [.finally([cb])](#FuncInstance+finally) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.register(funcMap)](#FuncInstance+register) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.registerClass(register)](#FuncInstance+registerClass) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
-    * [.pipe(method)](#FuncInstance+pipe) ⇒ <code>\*</code>
+    * [.pipe([...operators])](#FuncInstance+pipe) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
 
 <a name="FuncInstance+bind"></a>
 
@@ -176,14 +176,15 @@ Making result method could using all of registered functions
 
 <a name="FuncInstance+pipe"></a>
 
-### funcInstance.pipe(method) ⇒ <code>\*</code>
-This method allow a method to make some operators for this function
+### funcInstance.pipe([...operators]) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+This method allow one or more operators make some changes for this function
 
 **Kind**: instance method of [<code>FuncInstance</code>](#FuncInstance)  
+**Returns**: [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code> - Instance after changed  
 
-| Param |
-| --- |
-| method | 
+| Param | Type | Description |
+| --- | --- | --- |
+| [...operators] | <code>function</code> | operator list |
 
 <a name="give"></a>
 

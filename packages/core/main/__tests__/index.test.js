@@ -267,4 +267,30 @@ describe('index.js', () => {
         }).twiceReturn();
         expect(func2(3, 5)).toBe(16);
     });
+
+    it('should `pipe` method works', function () {
+        const fc = give(c => c);
+
+        const noReturnFc = fc.pipe(
+            instance => instance.after(
+                () => undefined
+            )
+        );
+
+        const paramAdd1AndResultAdd1Fc = fc.pipe(
+            instance => instance.before(
+                ({args}) => {
+                    args[0] += 1;
+                }
+            ),
+            instance => instance.after(
+                ({lastValue}) => lastValue + 1
+            )
+        );
+
+        expect(fc(1)).toBe(1);
+        expect(noReturnFc(1)).toBe(undefined);
+        expect(paramAdd1AndResultAdd1Fc(1)).toBe(3);
+
+    });
 });
