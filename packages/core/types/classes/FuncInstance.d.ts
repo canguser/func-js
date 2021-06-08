@@ -118,8 +118,8 @@ export class FuncInstance extends Function {
     registerClass(register: (instanceType?: (FuncInstance | Function) | undefined) => any): FuncInstance | Function;
     /**
      * This method allow one or more operators make some changes for this function
-     * @param operators{function=} operator list
+     * @param operators{Array<function>} operator list
      * @return {FuncInstance|Function} Instance after changed
      */
-    pipe(...operators?: Function | undefined): FuncInstance | Function;
+    pipe(...operators: Array<Function>): FuncInstance | Function;
 }

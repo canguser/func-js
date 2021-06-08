@@ -327,7 +327,7 @@ export class FuncInstance extends Function {
 
     /**
      * This method allow one or more operators make some changes for this function
-     * @param operators{function=} operator list
+     * @param operators{Array<function>} operator list
      * @return {FuncInstance|Function} Instance after changed
      */
     pipe(...operators) {

@@ -65,7 +65,7 @@ The class included the function's extra methods
     * [.finally([cb])](#FuncInstance+finally) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.register(funcMap)](#FuncInstance+register) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
     * [.registerClass(register)](#FuncInstance+registerClass) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
-    * [.pipe([...operators])](#FuncInstance+pipe) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+    * [.pipe(...operators)](#FuncInstance+pipe) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
 
 <a name="FuncInstance+bind"></a>
 
@@ -176,7 +176,7 @@ Making result method could using all of registered functions
 
 <a name="FuncInstance+pipe"></a>
 
-### funcInstance.pipe([...operators]) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
+### funcInstance.pipe(...operators) ⇒ [<code>FuncInstance</code>](#FuncInstance) \| <code>function</code>
 This method allow one or more operators make some changes for this function
 
 **Kind**: instance method of [<code>FuncInstance</code>](#FuncInstance)  
@@ -184,7 +184,7 @@ This method allow one or more operators make some changes for this function
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [...operators] | <code>function</code> | operator list |
+| ...operators | <code>Array.&lt;function()&gt;</code> | operator list |
 
 <a name="give"></a>
 
