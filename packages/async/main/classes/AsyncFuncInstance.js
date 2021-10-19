@@ -1,7 +1,9 @@
-import {FuncInstance, give} from "@func-js/core";
-import {AsyncManager} from "./AsyncManager";
-import {METHOD_END, METHOD_START} from "../constants/EventConstants";
-import {assignProperty, generateStrategyMapper, genID, getHashCode} from "@func-js/utils";
+import { FuncInstance, give } from '@func-js/core';
+import { AsyncManager } from './AsyncManager';
+import { METHOD_END, METHOD_START } from '../constants/EventConstants';
+import { assignInstance, assignProperty, generateStrategyMapper, genID, getHashCode } from '@func-js/utils';
+import { synchronously } from '@rapidly/utils/lib/commom/async/synchronously';
+import { asyncQueue } from '@rapidly/utils/lib/commom/async/asyncQueue';
 
 /**
  * Enum for cache-type values.
@@ -60,7 +62,7 @@ export class AsyncFuncInstance extends FuncInstance {
      * @param options.asyncManager{AsyncManager=}   Specified the async manager instance, default to using the params of `setManager` called
      * @return {FuncInstance | Function}            This function instance
      */
-    sign(local = '', {identity = genID, asyncManager} = {}) {
+    sign(local = '', { identity = genID, asyncManager } = {}) {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
 
         const getExistedSignMapper = () => {
@@ -79,8 +81,8 @@ export class AsyncFuncInstance extends FuncInstance {
 
         return this.surround(
             {
-                before: ({trans}) => {
-                    let {keptIdentity} = trans;
+                before: ({ trans }) => {
+                    let { keptIdentity } = trans;
                     if (keptIdentity === undefined) {
                         const signInfo = signMapper[signKey] || {};
                         signInfo.identity = keptIdentity = identity();
@@ -88,9 +90,9 @@ export class AsyncFuncInstance extends FuncInstance {
                         trans.keptIdentity = keptIdentity;
                     }
                 },
-                after: ({trans, lastValue: returnValue}) => {
+                after: ({ trans, lastValue: returnValue }) => {
                     const signInfo = signMapper[signKey] || {};
-                    let {keptIdentity} = trans;
+                    let { keptIdentity } = trans;
                     if (signInfo.identity === keptIdentity || keptIdentity === undefined) {
                         if (keptIdentity) {
                             delete trans.keptIdentity;
@@ -126,9 +128,9 @@ export class AsyncFuncInstance extends FuncInstance {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
         if (asyncManager && asyncManager instanceof AsyncManager) {
             start = give(start).before(() => {
-                asyncManager.emit(METHOD_START)
+                asyncManager.emit(METHOD_START);
             });
-            end = give(end).after(({lastValue: returnValue}) => {
+            end = give(end).after(({ lastValue: returnValue }) => {
                 asyncManager.emit(METHOD_END);
                 return returnValue;
             }, true);
@@ -136,7 +138,7 @@ export class AsyncFuncInstance extends FuncInstance {
 
         return this.surround({
             before: () => start.call(context || this),
-            after: ({lastValue: returnValue}) => {
+            after: ({ lastValue: returnValue }) => {
                 end.call(context || this);
                 return returnValue;
             },
@@ -194,7 +196,7 @@ export class AsyncFuncInstance extends FuncInstance {
             [CacheType.SESSION_STORAGE]: () => {
             },
             [CacheType.CUSTOM]: () => {
-            },
+            }
         }, memoryTypeDoing);
 
         typeStrategyMapper[type]();
@@ -211,12 +213,12 @@ export class AsyncFuncInstance extends FuncInstance {
                 const cachedValue = getter(key);
                 if (cachedValue && cachedValue.timestamp <= Date.now() + expire) {
                     preventDefault();
-                    const {data, isAsync = false} = cachedValue;
+                    const { data, isAsync = false } = cachedValue;
                     trans.isCached = true;
                     return isAsync ? Promise.resolve(data) : data;
                 }
             },
-            after: ({trans, args, lastValue: returnValue}) => {
+            after: ({ trans, args, lastValue: returnValue }) => {
                 if (!trans.isCached) {
                     const argsHashcode = getHashCode(args);
                     const key = keyPrefix + this.uniqueId + argsHashcode;
@@ -233,7 +235,7 @@ export class AsyncFuncInstance extends FuncInstance {
                     setter(key, {
                         data: returnValue,
                         timestamp: Date.now()
-                    })
+                    });
                 }
                 return returnValue;
             },
@@ -283,11 +285,11 @@ export class AsyncFuncInstance extends FuncInstance {
         asyncManager
     ) {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
-        return this.before(({args = [], preventDefault}) => {
+        return this.before(({ args = [], preventDefault }) => {
             const argsHashcode = getHashCode(args);
             const storage = asyncManager.getPreCacheStorage(this.uniqueId);
             const cacheInfo = storage[argsHashcode];
-            const {data, timestamp, timeout, once} = cacheInfo || {};
+            const { data, timestamp, timeout, once } = cacheInfo || {};
             if (cacheInfo && timestamp + timeout >= Date.now()) {
                 preventDefault();
                 if (once) {
@@ -309,16 +311,16 @@ export class AsyncFuncInstance extends FuncInstance {
     multiplyMerge(asyncManager) {
         asyncManager = asyncManager ? asyncManager : this.asyncManager;
 
-        const {multiplyMergeHeap = {}} = asyncManager.managedData;
+        const { multiplyMergeHeap = {} } = asyncManager.managedData;
         asyncManager.managedData.multiplyMergeHeap = multiplyMergeHeap;
 
         const _this = this;
 
         return this.surround(
             {
-                before({args, preventDefault, trans}) {
+                before({ args, preventDefault, trans }) {
                     const identity = _this.uniqueId + getHashCode(args);
-                    let targetHeap = multiplyMergeHeap[identity] || {callbacks: []};
+                    let targetHeap = multiplyMergeHeap[identity] || { callbacks: [] };
                     if (!targetHeap.isExecuting) {
                         targetHeap = {
                             isExecuting: true,
@@ -329,7 +331,7 @@ export class AsyncFuncInstance extends FuncInstance {
                     } else {
                         preventDefault();
                         return new Promise((resolve, reject) => {
-                            targetHeap.callbacks.push(({returnValue, isError, error}) => {
+                            targetHeap.callbacks.push(({ returnValue, isError, error }) => {
                                 if (!isError) {
                                     resolve(returnValue);
                                 } else {
@@ -338,29 +340,72 @@ export class AsyncFuncInstance extends FuncInstance {
                             });
                             multiplyMergeHeap[identity] = targetHeap;
                             trans.targetHeap = multiplyMergeHeap[identity];
-                        })
+                        });
                     }
                 },
-                after({trans, lastValue}) {
+                after({ trans, lastValue }) {
                     trans.targetHeap.isExecuting = false;
                     trans.targetHeap.callbacks = trans.targetHeap.callbacks
                         .filter(callback => {
-                            callback({returnValue: lastValue, isError: false});
+                            callback({ returnValue: lastValue, isError: false });
                             return false;
                         });
                     return lastValue;
                 },
-                onError({trans, error}) {
+                onError({ trans, error }) {
                     trans.targetHeap.isExecuting = false;
                     trans.targetHeap.callbacks = trans.targetHeap.callbacks
                         .filter(callback => {
-                            callback({error, isError: true});
+                            callback({ error, isError: true });
                             return false;
                         });
                 },
                 adaptAsync: true
             }
         );
+    }
+
+    /**
+     * Convert method to be synchronous
+     * Synchronously methods will only run once in the same time.
+     * If last method is running,
+     * The current method enters the queue and waits for the execution of the last run method to end.
+     * When method executed, the result will returned as a promise.
+     * @return {FuncInstance | Function} This function instance
+     */
+    synchronously() {
+        const _this = this;
+        const result = assignInstance(
+            function(...args) {
+                return synchronously(result, {
+                    task: _this,
+                    context: this,
+                    args
+                });
+            }, this
+        );
+        return result;
+    }
+
+    /**
+     * Convert method to be queued
+     * Queued methods will be ran in queue
+     * When method executed, the result will returned as a promise.
+     * @param {number} execSize The batch size of running task in once
+     * @return {FuncInstance | Function} This function instance
+     */
+    asyncQueue(execSize) {
+        const _this = this;
+        const result = assignInstance(
+            function(...args) {
+                return asyncQueue(result, execSize, {
+                    task: _this,
+                    context: this,
+                    args
+                });
+            }, this
+        );
+        return result;
     }
 
 }

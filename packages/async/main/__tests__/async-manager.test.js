@@ -1,12 +1,12 @@
-import {AsyncManager} from '../classes/AsyncManager';
-import {METHOD_END, METHOD_START, PROCESS_END, PROCESS_START} from "../constants/EventConstants";
+import { AsyncManager } from '../classes/AsyncManager';
+import { METHOD_END, METHOD_START, PROCESS_END, PROCESS_START } from '../constants/EventConstants';
 
 function wait(ms, args) {
     return new Promise(((resolve) => {
-        setTimeout(function () {
+        setTimeout(function() {
             resolve(args);
-        }, ms)
-    }))
+        }, ms);
+    }));
 }
 
 describe(
@@ -31,7 +31,7 @@ describe(
                 .then(() => sum1(5, 6));
         });
 
-        it('should [process] method works', function () {
+        it('should [process] method works', function() {
             const manager = new AsyncManager();
             const fetchInfo = manager.use(() => wait(100)).process();
             const fetchInfo2 = manager.use(() => wait(200)).process();
@@ -57,12 +57,12 @@ describe(
                     fetchInfo(),
                     fetchInfo(),
                     fetchInfo2(),
-                    fetchInfo2(),
+                    fetchInfo2()
                 ]
-            )
+            );
         });
 
-        it('should [sign] method works', function () {
+        it('should [sign] method works', function() {
             const manager = new AsyncManager();
             const fetchInfo = manager.use(() => wait(500, 100)).sign('fetchInfo');
 
@@ -71,15 +71,15 @@ describe(
                     expect(fetchInfo()).resolves.toBe(null),
                     expect(wait(250).then(() => fetchInfo())).resolves.toBe(100)
                 ]
-            )
+            );
         });
 
-        it('should [pre-cache] method works', function () {
+        it('should [pre-cache] method works', function() {
 
             expect.assertions(5);
 
             let i = 0;
-            const fetchData = function () {
+            const fetchData = function() {
                 return wait(100).then(() => {
                     expect(1).toBe(1);
                     return i++;
@@ -101,12 +101,12 @@ describe(
             ]);
         });
 
-        it('should [multiplyMerge] method works', function () {
+        it('should [multiplyMerge] method works', function() {
 
             expect.assertions(9);
 
             let i = 0;
-            const fetchData = function () {
+            const fetchData = function() {
                 return wait(100).then(() => {
                     expect(1).toBe(1);
                     if (i === 2) {
@@ -138,6 +138,64 @@ describe(
                 expect(result5).rejects.toThrow('i equals 2'),      // +1
                 expect(result6).rejects.toThrow('i equals 2')       // +1
             ]);
+
+        });
+
+        it('should method works - [synchronously]', async function() {
+
+            const store = [];
+
+            const saveData = function(something, ms) {
+                return wait(ms).then(() => {
+                    store.push(something);
+                });
+            };
+
+            const manager = new AsyncManager();
+            const func = manager.use(saveData).synchronously();
+
+            await Promise.all(
+                [
+                    func(100, 100),
+                    func(200, 50),
+                    func(300, 20),
+                    func(400, 0)
+                ]
+            );
+
+            expect(store[0]).toBe(100);
+            expect(store[1]).toBe(200);
+            expect(store[2]).toBe(300);
+            expect(store[3]).toBe(400);
+
+        });
+
+        it('should method works - [asyncQueue]', async function() {
+
+            const store = [];
+
+            const saveData = function(something, ms) {
+                return wait(ms).then(() => {
+                    store.push(something);
+                });
+            };
+
+            const manager = new AsyncManager();
+            const func = manager.use(saveData).asyncQueue(2);
+
+            await Promise.all(
+                [
+                    func(100, 100),
+                    func(200, 50),
+                    func(300, 20),
+                    func(400, 0)
+                ]
+            );
+
+            expect(store[0]).toBe(200);
+            expect(store[1]).toBe(100);
+            expect(store[2]).toBe(400);
+            expect(store[3]).toBe(300);
 
         });
     }
